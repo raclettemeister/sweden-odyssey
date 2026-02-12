@@ -98,3 +98,31 @@ Le record : **150 piqûres** sur le corps d'un seul scout. Le visage à moitié 
 ### La Première Grande Étendue d'Eau
 
 Après plusieurs jours de marche, harcelés par les moustiques, le groupe arrive devant sa **première grande étendue d'eau**. Il faut la traverser en **combinaisons**.
+
+### Les Élans
+
+Le groupe tombe nez à nez avec un **troupeau d'élans gigantesques**. Un spectacle majestueux.
+
+### Le Feu de Camp et les Chaussures
+
+On fait un feu pour se réchauffer. Les chaussures sont posées trop près des flammes.
+
+> **Note pour le jeu** : Dans le jeu, quelqu'un brûle sa chaussure et doit continuer avec une chaussure en moins. Dans la réalité, cela ne s'est pas passé.
+
+### La Petite Faune et les Premiers Signes de Civilisation
+
+On découvre des petites souris en chemin. Après plusieurs jours de marche, le groupe tombe enfin sur un **premier signe de civilisation** : une maison reculée avec un chien domestiqué.
+
+### Les Obstacles
+
+Sauts à travers des **crevasses gigantesques**, cascades torrentueuses à éviter. Certains tombent malades (diarrhée — les classiques d'une expédition). Mais on continue.
+
+## Laktatjakka — Le Refuge (~16 juillet)
+
+Après une **dizaine de jours de marche**, le voyage à pied s'arrête enfin. Le groupe trouve refuge dans un petit poste de train appelé **Laktatjakka**.
+
+> **Laktatjakka** — première référence géographique réelle de l'aventure, permettant de situer le parcours en Laponie suédoise.
+
+---
+
+> **Note générale pour le jeu** : En réalité, personne n'est mort et l'expédition n'était pas si terrible. Mais le jeu va dramatiser : il y aura des morts, des blessures graves, des maladies. Le jeu pousse l'aventure à l'extrême.
