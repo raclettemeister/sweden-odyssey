@@ -63,4 +63,30 @@ Il est **23h23**. Le soleil offre un magnifique coucher de soleil qui ne dure qu
 
 ### Minuit — L'Anniversaire
 
-À **minuit pile**, le groupe fête l'anniversaire d'un camarade. Au menu : une petite bouteille de vodka, quelques cacahuètes et un livre en guise de cadeau. On prend une photo. Il est minuit, et **il fait jour**.
+À **minuit pile**, le groupe fête l'anniversaire d'un camarade. Au menu : une petite bouteille de vodka, quelques cacahuètes et un livre en guise de cadeau. On met la musique sur une **petite radio à dynamo** et on danse. On prend une photo. Il est minuit, et **il fait jour**.
+
+## La Grande Traversée
+
+### Le Terrain
+
+Le groupe doit traverser **plusieurs rivières difficiles**, faire des détours pour éviter des **crevasses gigantesques**, et naviguer prudemment pour ne pas tomber dans des crevasses de neige. On consulte les cartes régulièrement, espérant ne pas se tromper de chemin.
+
+### Le Paradoxe Neige et Soleil
+
+La neige, le soleil, la lumière, les moustiques — tout en même temps. Certains avancent **torse nu, en slip**. Dès qu'ils ont trop chaud, ils se laissent tomber dans la neige à leurs pieds, se roulent dedans un coup, se relèvent et repartent rafraîchis. Une situation totalement paradoxale.
+
+### Bivouac sous la Pluie
+
+Le groupe s'arrête dans un bivouac, fatigué. La pluie commence à tomber. Ils attendent qu'elle passe.
+
+### Les Spectacles de la Nature
+
+Plus loin, ils s'arrêtent devant des **spectacles majestueux** — la beauté et la force de la nature — avant de reprendre la route.
+
+### La Faune
+
+Des **bouquetins** et d'autres animaux locaux accompagnent le groupe le long du chemin.
+
+### La Première Grande Étendue d'Eau
+
+Après plusieurs jours de marche, harcelés par les moustiques, le groupe arrive devant sa **première grande étendue d'eau**. Il faut la traverser en **combinaisons**.
