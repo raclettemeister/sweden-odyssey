@@ -131,6 +131,48 @@ Les camions sont **très rares** et ne peuvent prendre que **2 personnes à la f
 
 Certains d'entre eux ne sont pas bien pris en stop — le processus est long et incertain.
 
+## La Construction des Radeaux (~1 semaine)
+
+Le groupe arrive au bord de l'eau. Pas d'autre solution que de **construire ses propres radeaux**.
+
+**4 radeaux** sont construits par **équipes de 4**. La construction prend **une semaine entière**.
+
+### Le Four en Terre
+
+Pendant la semaine de construction, le groupe en profite pour bâtir un **four en terre** et se payer le luxe de manger des **pizzas** avec de la farine trouvée sur place.
+
+### La Promesse
+
+C'est aussi le moment choisi pour célébrer la **promesse** d'un des scouts — le rite de passage ultime du scoutisme.
+
+## Le Voyage en Radeau
+
+### Le Départ
+
+Dernier briefing, consultation de la carte du parcours, et le groupe **prend les voiles** en direction de la terre promise.
+
+### Les 4 Radeaux
+
+Chaque équipe a fait ses propres choix d'ingénierie et ses sacrifices :
+
+- **1 radeau à voile** — finit par être extrêmement efficace
+- **3 radeaux à bras** — moins performants
+- Le radeau de **l'équipe la moins motivée** prend carrément l'eau. Catastrophe pour cette équipe.
+
+### La Vie sur l'Eau
+
+Le groupe s'arrête **chaque soir sur des petites îles**, mangeant du poisson pêché en chemin et reprenant des forces avant de repartir.
+
+Certains jours, les poissons sont gros. D'autres jours, ils sont minuscules — un travail de tous les diables pour manger un tout petit peu.
+
+### La Fin du Voyage en Radeau
+
+Il **drache pendant quatre jours d'affilée**. Le groupe est épuisé. Certains radeaux ont coulé. Heureusement, ils trouvent quelqu'un qui accepte de leur faire traverser le dernier passage, et ils retrouvent enfin **la civilisation**.
+
+## Le Retour vers Bruxelles
+
+Le voyage est un **succès**. Le groupe prend tout doucement la direction de **Bruxelles**. Beaucoup de choses se passent dans ces derniers moments *(détails à venir)*.
+
 ---
 
 > **Note générale pour le jeu** : En réalité, personne n'est mort et l'expédition n'était pas si terrible. Mais le jeu va dramatiser : il y aura des morts, des blessures graves, des maladies. Le jeu pousse l'aventure à l'extrême.
