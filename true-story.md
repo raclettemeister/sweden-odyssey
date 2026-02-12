@@ -26,3 +26,9 @@ Le **5 juillet**, ils atteignent **Malmö**. Une dernière nuit dans une gare, e
 Après Malmö, le groupe reprend le train une dernière fois. Cette fois-ci à travers la campagne suédoise, direction leur première destination clé : **le pied du glacier** *(nom à préciser)*.
 
 Arrivée au pied du glacier le **6 ou 7 juillet, vers midi**.
+
+## L'Ascension du Premier Plateau
+
+Après **trois heures d'une grimpe extrêmement difficile**, le groupe atteint le sommet de son premier plateau. Les sacs à dos pèsent entre **30 et 40 kg par personne**.
+
+Essoufflés, ils s'abreuvent au bord d'une cascade, buvant l'eau à mains nues.
