@@ -32,3 +32,23 @@ Arrivée au pied du glacier le **6 ou 7 juillet, vers midi**.
 Après **trois heures d'une grimpe extrêmement difficile**, le groupe atteint le sommet de son premier plateau. Les sacs à dos pèsent entre **30 et 40 kg par personne**.
 
 Essoufflés, ils s'abreuvent au bord d'une cascade, buvant l'eau à mains nues.
+
+## La Première Neige et la Traversée du Glacier (6 - 8 juillet)
+
+**17h, le 6 juillet** — Malgré les **25°C** à l'extérieur, le groupe découvre sa première neige sur le glacier. C'est le moment des premières chutes, des premiers instants de fatigue totale. Mais l'aventure ne fait que commencer.
+
+Le périple continue pendant **deux jours**, les tentes plantées au milieu de nulle part.
+
+### Le Soleil de Minuit
+
+Le groupe se trouve dans une zone où le soleil ne se couche jamais. Ils observent jusqu'à **six ou sept couchers de soleil** à travers les montagnes par jour, sans que la nuit ne tombe jamais.
+
+### L'Ennemi Préféré
+
+C'est aussi le moment où ils font connaissance avec leur compagnon de route le plus fidèle : **les moustiques**, qui ne les quitteront plus du voyage.
+
+### La Nourriture
+
+- **Le midi** : nouilles crues et croquantes, mangées telles quelles
+- **Le soir** : le luxe de pouvoir les faire chauffer dans de l'eau bouillante
+- **Compléments** : tablettes de vitamine C et crevettes en tube pour tenir le coup
