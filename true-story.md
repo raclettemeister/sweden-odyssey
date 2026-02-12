@@ -85,7 +85,15 @@ Plus loin, ils s'arrêtent devant des **spectacles majestueux** — la beauté e
 
 ### La Faune
 
-Des **bouquetins** et d'autres animaux locaux accompagnent le groupe le long du chemin.
+Des **bouquetins** et d'autres animaux locaux accompagnent le groupe le long du chemin. Chaque jour, on voit les traces de leurs pas dans la neige. On les suit et on avance.
+
+### L'Enfer des Moustiques
+
+Les moustiques deviennent de plus en plus nombreux. Il y en a tellement que **le simple fait de marcher en écrase à chaque pas**.
+
+Une nuée de moustiques entoure le groupe en permanence. La nuit, on s'enferme dans les tentes — mais malheur à celui qui colle son corps trop près de la toile : les moustiques **piquent à travers le tissu de la tente**, à travers les **vestes scoutes** et même à travers les **pulls militaires** en dessous. Le moustique passe à travers tout.
+
+Le record : **150 piqûres** sur le corps d'un seul scout. Le visage à moitié défiguré.
 
 ### La Première Grande Étendue d'Eau
 
