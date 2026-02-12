@@ -517,6 +517,82 @@
             50% { border-color: transparent; }
         }
 
+        /* Real Story Overlay */
+        .story-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 6, 20, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 55;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        .story-overlay.active { display: flex; }
+
+        .story-card {
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .story-card-header {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: var(--sweden-yellow);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .story-card-location {
+            font-size: 26px;
+            color: var(--sweden-blue);
+            margin-bottom: 12px;
+        }
+
+        .story-photo {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border: 3px solid var(--sweden-yellow);
+            margin-bottom: 8px;
+            display: none;
+        }
+        .story-photo.loaded { display: block; }
+
+        .story-photo-caption {
+            font-size: 16px;
+            color: var(--amber-dim);
+            font-style: italic;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .story-photo-caption.loaded { display: block; }
+
+        .story-text {
+            font-size: 20px;
+            color: var(--white);
+            line-height: 1.5;
+            text-align: left;
+            background: #0a0a1a;
+            border-left: 3px solid var(--sweden-yellow);
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .story-placeholder {
+            font-size: 16px;
+            color: #444;
+            font-style: italic;
+            padding: 15px;
+            border: 1px dashed #333;
+            margin-bottom: 15px;
+        }
+
         /* Responsive */
         @media (max-width: 600px) {
             #crt { width: 100vw; height: 100vh; border-radius: 0; }
@@ -524,6 +600,7 @@
             .hud { grid-template-columns: repeat(3, 1fr); }
             .shop-grid { grid-template-columns: 1fr; }
             .title-art { font-size: 7px; }
+            .story-photo { max-height: 150px; }
         }
     </style>
 </head>
@@ -646,6 +723,7 @@
         </div>
 
         <div class="scene-art" id="scene-art"></div>
+        <img id="scene-photo" style="display:none; width:100%; max-height:90px; object-fit:cover; border:2px solid var(--sweden-yellow); margin:3px 0; border-radius:4px; cursor:pointer;" onclick="this.style.maxHeight = this.style.maxHeight === '90px' ? '250px' : '90px'" />
 
         <div class="narrative" id="narrative">
             Welcome to Sweden...
@@ -661,6 +739,21 @@
             <div class="result-text" id="result-text"></div>
             <div class="stat-changes" id="stat-changes"></div>
             <button class="press-start" onclick="closeResult()">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- REAL STORY OVERLAY -->
+    <div class="story-overlay" id="story-overlay">
+        <div class="story-card">
+            <div class="story-card-header">FROM THE REAL TRIP</div>
+            <div class="story-card-location" id="story-location"></div>
+            <img class="story-photo" id="story-photo" alt="Trip photo" />
+            <div class="story-photo-caption" id="story-caption"></div>
+            <div class="story-text" id="story-text"></div>
+            <div class="story-placeholder" id="story-placeholder">
+                No story yet for this day. Edit data/story.json to add your memories!
+            </div>
+            <button class="press-start" onclick="closeStory()">NEXT DAY</button>
         </div>
     </div>
 
@@ -684,6 +777,25 @@
 </div>
 
 <script>
+// ============================================================
+//  LOAD PERSONAL STORY DATA FROM data/story.json
+// ============================================================
+
+let storyData = null;
+
+async function loadStoryData() {
+    try {
+        const resp = await fetch('data/story.json');
+        if (resp.ok) {
+            storyData = await resp.json();
+            console.log('Story data loaded:', storyData.days.length, 'days');
+        }
+    } catch (e) {
+        console.log('No story data found (data/story.json). Game works fine without it.');
+    }
+}
+loadStoryData();
+
 // ============================================================
 //  GAME DATA
 // ============================================================
@@ -1292,9 +1404,20 @@ function startDay() {
         state.health = Math.min(100, state.health + 2);
     }
 
-    // Scene art
+    // Scene art or real photo
     const artEl = document.getElementById('scene-art');
-    artEl.textContent = SCENE_ART[loc.type] || SCENE_ART.wilderness;
+    const scenePhoto = document.getElementById('scene-photo');
+    const dayData = storyData && storyData.days ? storyData.days.find(d => d.day === state.day) : null;
+    if (dayData && dayData.photo) {
+        artEl.style.display = 'none';
+        scenePhoto.src = dayData.photo;
+        scenePhoto.style.display = 'block';
+        scenePhoto.style.maxHeight = '90px';
+    } else {
+        scenePhoto.style.display = 'none';
+        artEl.style.display = 'flex';
+        artEl.textContent = SCENE_ART[loc.type] || SCENE_ART.wilderness;
+    }
 
     updateHUD();
 
@@ -1414,16 +1537,78 @@ function closeResult() {
         return;
     }
 
-    // Advance day
-    state.day++;
+    // Show real story for this day (if available), then advance
+    showRealStory(state.day, () => {
+        state.day++;
+        state.energy = Math.min(100, state.energy + 8);
+        if (state.day > 14) {
+            victory();
+        } else {
+            startDay();
+        }
+    });
+}
 
-    // Natural energy recovery
-    state.energy = Math.min(100, state.energy + 8);
+// ============================================================
+//  REAL STORY INTERSTITIAL
+// ============================================================
 
-    if (state.day > 14) {
-        victory();
+let storyCallback = null;
+
+function showRealStory(day, callback) {
+    const dayData = storyData && storyData.days ? storyData.days.find(d => d.day === day) : null;
+    const hasStory = dayData && dayData.realStory && !dayData.realStory.startsWith('Write your');
+    const hasPhoto = dayData && dayData.photo && dayData.photo.length > 0;
+
+    // Skip if no personal content for this day
+    if (!hasStory && !hasPhoto) {
+        callback();
+        return;
+    }
+
+    storyCallback = callback;
+
+    const loc = LOCATIONS[day - 1];
+    document.getElementById('story-location').textContent = `Day ${day} - ${loc.name}`;
+
+    // Photo
+    const photoEl = document.getElementById('story-photo');
+    const captionEl = document.getElementById('story-caption');
+    if (hasPhoto) {
+        photoEl.src = dayData.photo;
+        photoEl.classList.add('loaded');
+        if (dayData.photoCaption) {
+            captionEl.textContent = dayData.photoCaption;
+            captionEl.classList.add('loaded');
+        } else {
+            captionEl.classList.remove('loaded');
+        }
     } else {
-        startDay();
+        photoEl.classList.remove('loaded');
+        captionEl.classList.remove('loaded');
+    }
+
+    // Story text
+    const textEl = document.getElementById('story-text');
+    const placeholderEl = document.getElementById('story-placeholder');
+    if (hasStory) {
+        textEl.textContent = dayData.realStory;
+        textEl.style.display = 'block';
+        placeholderEl.style.display = 'none';
+    } else {
+        textEl.style.display = 'none';
+        placeholderEl.style.display = 'block';
+    }
+
+    document.getElementById('story-overlay').classList.add('active');
+}
+
+function closeStory() {
+    AudioEngine.click();
+    document.getElementById('story-overlay').classList.remove('active');
+    if (storyCallback) {
+        storyCallback();
+        storyCallback = null;
     }
 }
 
@@ -1504,9 +1689,15 @@ document.addEventListener('keydown', (e) => {
         if (btns[idx]) btns[idx].click();
     }
     if (e.key === 'Enter') {
+        const storyOv = document.getElementById('story-overlay');
+        if (storyOv.classList.contains('active')) {
+            closeStory();
+            return;
+        }
         const overlay = document.getElementById('result-overlay');
         if (overlay.classList.contains('active')) {
             closeResult();
+            return;
         }
         const titleBtn = document.querySelector('#title-screen.active .press-start');
         if (titleBtn) titleBtn.click();

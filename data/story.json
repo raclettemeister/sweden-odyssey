@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "title": "Sweden Trail",
+    "subtitle": "A Boy Scout Adventure",
+    "year": 2008,
+    "playerAge": 18,
+    "description": "My 2-week Boy Scout trip across Sweden"
+  },
+
+  "days": [
+    {
+      "day": 1,
+      "location": "Stockholm",
+      "type": "city",
+      "realStory": "Write your Day 1 story here... What happened when you arrived in Stockholm?",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 2,
+      "location": "Sigtuna",
+      "type": "town",
+      "realStory": "Write your Day 2 story here... Sweden's oldest town, the Viking rune stones...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 3,
+      "location": "Uppsala",
+      "type": "city",
+      "realStory": "Write your Day 3 story here... The university city, the cathedral...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 4,
+      "location": "Sala Silvergruva",
+      "type": "wilderness",
+      "realStory": "Write your Day 4 story here... The old silver mines, deep forests...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 5,
+      "location": "Lake Siljan",
+      "type": "lake",
+      "realStory": "Write your Day 5 story here... The meteor crater lake in Dalarna...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 6,
+      "location": "Mora",
+      "type": "town",
+      "realStory": "Write your Day 6 story here... Gateway to the wilderness...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 7,
+      "location": "Orsa Finnmark",
+      "type": "wilderness",
+      "realStory": "Write your Day 7 story here... Deep boreal forest, bear country...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 8,
+      "location": "Fulufjallet",
+      "type": "mountain",
+      "realStory": "Write your Day 8 story here... Sweden's highest waterfall...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 9,
+      "location": "Idre",
+      "type": "mountain",
+      "realStory": "Write your Day 9 story here... Mountain village near Norway...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 10,
+      "location": "Grovelsjon",
+      "type": "lake",
+      "realStory": "Write your Day 10 story here... Alpine lake surrounded by mountains...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 11,
+      "location": "Rogen Reserve",
+      "type": "wilderness",
+      "realStory": "Write your Day 11 story here... Endless lakes and rocky terrain...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 12,
+      "location": "Funäsdalen",
+      "type": "mountain",
+      "realStory": "Write your Day 12 story here... The fjeld village, crisp mountain air...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 13,
+      "location": "Sylarna",
+      "type": "mountain",
+      "realStory": "Write your Day 13 story here... The legendary mountain station, final push...",
+      "photo": "",
+      "photoCaption": ""
+    },
+    {
+      "day": 14,
+      "location": "Storlien",
+      "type": "town",
+      "realStory": "Write your Day 14 story here... You made it to the Norwegian border!",
+      "photo": "",
+      "photoCaption": ""
+    }
+  ],
+
+  "memories": [
+    {
+      "title": "Example Memory",
+      "text": "Add your favorite trip memories here. Delete this example and add your own.",
+      "photo": "",
+      "photoCaption": ""
+    }
+  ]
+}
