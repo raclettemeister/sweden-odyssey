@@ -123,6 +123,14 @@ Après une **dizaine de jours de marche**, le voyage à pied s'arrête enfin. Le
 
 > **Laktatjakka** — première référence géographique réelle de l'aventure, permettant de situer le parcours en Laponie suédoise.
 
+## L'Auto-stop — 3 Jours d'Attente
+
+Le train ne vient pas. Le groupe n'a pas d'autre choix que de faire du **stop pendant 3 jours**.
+
+Les camions sont **très rares** et ne peuvent prendre que **2 personnes à la fois**. Pour un groupe de 20, cela pose un vrai dilemme : il faut décider **qui monte dans le camion et qui reste attendre**. Certains doivent patienter jusqu'à ce que tout le monde soit passé avant de pouvoir partir eux-mêmes.
+
+Certains d'entre eux ne sont pas bien pris en stop — le processus est long et incertain.
+
 ---
 
 > **Note générale pour le jeu** : En réalité, personne n'est mort et l'expédition n'était pas si terrible. Mais le jeu va dramatiser : il y aura des morts, des blessures graves, des maladies. Le jeu pousse l'aventure à l'extrême.
