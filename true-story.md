@@ -52,3 +52,15 @@ C'est aussi le moment où ils font connaissance avec leur compagnon de route le 
 - **Le midi** : nouilles crues et croquantes, mangées telles quelles
 - **Le soir** : le luxe de pouvoir les faire chauffer dans de l'eau bouillante
 - **Compléments** : tablettes de vitamine C et crevettes en tube pour tenir le coup
+
+### La Vie au Camp
+
+La vaisselle se fait dans les grandes rivières, entourés de moustiques, avec une vue surprenante sur les paysages.
+
+### 23h23 — Le Coucher de Soleil de Dix Minutes
+
+Il est **23h23**. Le soleil offre un magnifique coucher de soleil qui ne dure que **dix minutes** avant de remonter.
+
+### Minuit — L'Anniversaire
+
+À **minuit pile**, le groupe fête l'anniversaire d'un camarade. Au menu : une petite bouteille de vodka, quelques cacahuètes et un livre en guise de cadeau. On prend une photo. Il est minuit, et **il fait jour**.
