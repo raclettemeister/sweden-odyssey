@@ -1,50 +1,73 @@
-# 🧀 Chez Julien Simulator - Beta
+# Sweden Trail
 
-A narrative business simulation game based on the true story of **Chez Julien**, a cheese shop in Brussels.
+A collaborative game about a real 2-week Boy Scout trip across Sweden in 2008. 20 people. 14 days. Stockholm to the Norwegian border.
 
-## 🎮 Play Now
+## What Is This?
 
-**[Play the Beta](https://YOUR_USERNAME.github.io/chez-julien-simulator/)**
+This started as one person's memory of a scout trip and is becoming a **full game built by the 20 people who were actually there**. The goal is a Steam release built entirely with AI coding tools (Claude Code, Cursor) — none of us are programmers.
 
-## 📖 The Story
+## Current Status
 
-You are Julien, transforming a dying épicerie sèche (dry goods store) into the neighborhood's beloved fromagerie. Balance business growth with family life, navigate crises, and maybe—just maybe—save enough to buy the building before the deadline.
+### Phase 0: HTML Demo (NOW)
+An Oregon Trail-inspired browser game that serves as our proof of concept and recruitment tool.
 
-## ✨ Features
+**Play it:** Open `sweden_trip.html` in any browser. No install needed.
 
-- **25 months** of real decisions based on actual events
-- **Dynamic financials** with seasonal fluctuations (December rush!)
-- **Work/life balance** mechanics - burnout and family relationships matter
-- **Photo album** of memories unlocked through gameplay
-- **Procedural jazz music** that adapts to your stress level
-- **Pixel art scenes** that evolve with your choices
+### Phase 1: Ren'Py Prototype (NEXT)
+We're moving to [Ren'Py](https://www.renpy.org/) — a Python-based visual novel engine perfect for narrative adventure games. Hundreds of Ren'Py games are on Steam. AI tools work excellently with its text-based codebase.
 
-## 🐕 Meet Poncho
+### Phase 2+: Full Production
+See `docs/project-vision.md` for the full roadmap.
 
-The Australian Shepherd who stole every heart. He's not optional.
+## The Game
 
-## 🎯 Win Condition
+You are 18 years old, setting off on a 14-day Boy Scout trek from Stockholm to Storlien (the Norwegian border). Manage your health, food, morale, and energy as you hike through forests, mountains, and lake country.
 
-Save €80,000 to buy the building before the deadline. But the real victory is the story you create along the way.
+### Route
+Stockholm → Sigtuna → Uppsala → Sala → Lake Siljan → Mora → Orsa Finnmark → Fulufjället → Idre → Grovelsjon → Rogen Reserve → Funäsdalen → Sylarna → Storlien
 
-## 🧪 Beta Testing
+### HTML Demo Features
+- 14 days of travel across real Swedish locations
+- Resource management — health, food, morale, energy, Swedish kronor
+- 20+ random events — moose encounters, northern lights, bear tracks, fika breaks
+- Supply shop with gear that changes gameplay outcomes
+- 3 difficulty levels
+- Personal story/photo layer from the real trip
+- Retro CRT aesthetic with scanlines and pixel fonts
 
-This is a beta version. We'd love your feedback on:
-- Game balance (too easy? too hard?)
-- Story moments that resonate
-- Bugs or issues
-- Missing features
+## Adding Your Real Trip Content
 
-## 📝 Feedback
+The game loads personal stories and photos from `data/story.json` and `photos/`.
 
-Open an issue or contact the developer directly.
+### From Your Phone (GitHub web)
+1. Go to `data/story.json`
+2. Tap the edit (pencil) icon
+3. Find your day, replace the placeholder text in `"realStory"`
+4. Commit
 
-## 🙏 Credits
+### From Desktop
+1. Upload photos to `photos/` (drag and drop on GitHub)
+2. Edit `data/story.json` to add your story and point to the photo
+3. Commit and push
 
-- Based on the real **Chez Julien** in Brussels
-- Built with love and cheese
-- Poncho is a very good boy
+## Project Structure
 
----
+```
+sweden_trip.html        ← HTML demo (playable now)
+data/
+  story.json            ← your real trip stories and photo references
+photos/                 ← trip photos (upload here)
+docs/
+  project-vision.md     ← full project vision, roadmap, and decisions
+```
 
-*"Chez Julien... chez moi, chez vous, chez mes potes!"*
+## How We Work
+
+- **No manual coding.** All code is AI-generated using Claude Code, Cursor, or similar tools.
+- **No code review.** None of us are programmers. We rely on AI + automated testing.
+- **One person per feature/file at a time** to avoid merge conflicts.
+- **GitHub is our hub** for code, docs, and coordination.
+
+## The Team
+
+20 members of the original 2008 Sweden scout trip, collaborating to turn our shared memory into a game.

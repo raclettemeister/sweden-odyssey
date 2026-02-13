@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweden Trail - A Scout Adventure</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #33ff33;
+            --green-dim: #1a8a1a;
+            --amber: #ffb000;
+            --amber-dim: #805800;
+            --blue: #4fc3f7;
+            --red: #ff4444;
+            --white: #e0e0e0;
+            --dark: #0a0a0a;
+            --panel-bg: #111;
+            --sweden-blue: #006aa7;
+            --sweden-yellow: #fecc00;
+        }
+
+        body {
+            background: #000;
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CRT Screen Effect */
+        #crt {
+            width: 900px;
+            max-width: 98vw;
+            height: 640px;
+            max-height: 95vh;
+            background: var(--dark);
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 60px rgba(51, 255, 51, 0.15),
+                inset 0 0 80px rgba(0,0,0,0.6);
+        }
+
+        #crt::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.15) 0px,
+                rgba(0,0,0,0.15) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #crt::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%);
+            pointer-events: none;
+            z-index: 101;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            padding: 30px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+        .screen.active { display: flex; flex-direction: column; }
+
+        /* Scrollbar */
+        .screen::-webkit-scrollbar { width: 8px; }
+        .screen::-webkit-scrollbar-track { background: #111; }
+        .screen::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
+
+        /* Title Screen */
+        #title-screen {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .title-art {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            line-height: 1.2;
+            color: var(--sweden-yellow);
+            white-space: pre;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 var(--sweden-blue);
+        }
+
+        .title-subtitle {
+            font-size: 28px;
+            color: var(--sweden-blue);
+            margin-bottom: 5px;
+        }
+
+        .title-subtitle2 {
+            font-size: 22px;
+            color: var(--green-dim);
+            margin-bottom: 30px;
+        }
+
+        .title-flag {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .flag-line {
+            display: block;
+            background: var(--sweden-blue);
+            padding: 2px 40px;
+            margin: 1px auto;
+            width: 200px;
+        }
+        .flag-cross-h {
+            display: block;
+            background: var(--sweden-yellow);
+            padding: 4px 40px;
+            margin: 0 auto;
+            width: 200px;
+        }
+
+        .blink {
+            animation: blink 1.2s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .press-start {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            color: var(--green);
+            cursor: pointer;
+            padding: 15px 30px;
+            border: 2px solid var(--green);
+            background: transparent;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .press-start:hover {
+            background: var(--green);
+            color: var(--dark);
+        }
+
+        /* Setup Screen */
+        #setup-screen { justify-content: center; align-items: center; }
+
+        .setup-box {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .setup-box h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: var(--sweden-yellow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            color: var(--green-dim);
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid var(--green-dim);
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            padding: 8px 12px;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 10px rgba(51,255,51,0.2);
+        }
+        .form-group select option {
+            background: #1a1a1a;
+            color: var(--green);
+        }
+
+        /* Shop Screen */
+        #shop-screen { justify-content: flex-start; }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .shop-header h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 13px;
+            color: var(--sweden-yellow);
+            margin-bottom: 8px;
+        }
+        .shop-budget {
+            font-size: 24px;
+            color: var(--amber);
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .shop-item {
+            background: #1a1a1a;
+            border: 1px solid var(--green-dim);
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .shop-item:hover { border-color: var(--green); background: #222; }
+        .shop-item.bought { border-color: var(--amber); background: #1a1500; }
+
+        .shop-item-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: var(--green);
+            margin-bottom: 5px;
+        }
+        .shop-item-desc {
+            font-size: 16px;
+            color: var(--green-dim);
+            margin-bottom: 5px;
+        }
+        .shop-item-price {
+            color: var(--amber);
+            font-size: 18px;
+        }
+        .shop-item-qty {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: var(--amber);
+            color: #000;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 3px;
+        }
+
+        /* Travel / Main Game Screen */
+        #travel-screen { padding: 15px 20px; }
+
+        .hud {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .stat {
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-bar {
+            height: 8px;
+            background: #222;
+            margin: 3px 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        .stat-fill.health { background: var(--red); }
+        .stat-fill.food { background: var(--amber); }
+        .stat-fill.morale { background: var(--sweden-yellow); }
+        .stat-fill.energy { background: var(--blue); }
+        .stat-value {
+            font-size: 16px;
+        }
+        .stat-value.danger { color: var(--red); }
+        .stat-value.warning { color: var(--amber); }
+        .stat-value.good { color: var(--green); }
+
+        .kronor-display {
+            text-align: center;
+            font-size: 18px;
+            color: var(--amber);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #333;
+        }
+
+        .day-number {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            color: var(--sweden-yellow);
+        }
+
+        .location-name {
+            font-size: 22px;
+            color: var(--sweden-blue);
+        }
+
+        .weather-display {
+            font-size: 18px;
+            color: var(--green-dim);
+        }
+
+        .scene-art {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            line-height: 1.1;
+            color: var(--green-dim);
+            white-space: pre;
+            text-align: center;
+            margin: 5px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .narrative {
+            background: #111;
+            border-left: 3px solid var(--green-dim);
+            padding: 12px 15px;
+            margin: 8px 0;
+            font-size: 20px;
+            line-height: 1.4;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 60px;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .choice-btn {
+            background: transparent;
+            border: 1px solid var(--green-dim);
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+        }
+        .choice-btn:hover {
+            background: var(--green);
+            color: var(--dark);
+            border-color: var(--green);
+        }
+        .choice-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Result overlay */
+        .result-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 30px;
+        }
+        .result-overlay.active { display: flex; }
+
+        .result-box {
+            max-width: 550px;
+            text-align: center;
+        }
+        .result-box h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .result-text {
+            font-size: 22px;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+        .stat-changes {
+            margin-bottom: 15px;
+        }
+        .stat-change {
+            font-size: 20px;
+            margin: 4px 0;
+        }
+        .stat-change.positive { color: var(--green); }
+        .stat-change.negative { color: var(--red); }
+
+        /* Game Over / Victory */
+        #gameover-screen, #victory-screen {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .end-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .end-art {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            line-height: 1.1;
+            white-space: pre;
+            margin-bottom: 20px;
+        }
+
+        .end-summary {
+            font-size: 22px;
+            line-height: 1.5;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .stats-recap {
+            text-align: left;
+            margin: 10px auto;
+            max-width: 350px;
+            font-size: 20px;
+        }
+        .stats-recap div { margin: 5px 0; }
+
+        /* Progress bar for journey */
+        .journey-progress {
+            width: 100%;
+            height: 12px;
+            background: #222;
+            margin: 5px 0;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        .journey-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sweden-blue), var(--sweden-yellow));
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+        .journey-marker {
+            position: absolute;
+            top: -2px;
+            width: 16px;
+            height: 16px;
+            background: var(--green);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            transition: left 0.5s ease;
+            border: 2px solid var(--dark);
+        }
+        .journey-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--green);
+            animation: typing-cursor 0.7s step-end infinite;
+        }
+        @keyframes typing-cursor {
+            50% { border-color: transparent; }
+        }
+
+        /* Real Story Overlay */
+        .story-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 6, 20, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 55;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        .story-overlay.active { display: flex; }
+
+        .story-card {
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .story-card-header {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: var(--sweden-yellow);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .story-card-location {
+            font-size: 26px;
+            color: var(--sweden-blue);
+            margin-bottom: 12px;
+        }
+
+        .story-photo {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border: 3px solid var(--sweden-yellow);
+            margin-bottom: 8px;
+            display: none;
+        }
+        .story-photo.loaded { display: block; }
+
+        .story-photo-caption {
+            font-size: 16px;
+            color: var(--amber-dim);
+            font-style: italic;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .story-photo-caption.loaded { display: block; }
+
+        .story-text {
+            font-size: 20px;
+            color: var(--white);
+            line-height: 1.5;
+            text-align: left;
+            background: #0a0a1a;
+            border-left: 3px solid var(--sweden-yellow);
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .story-placeholder {
+            font-size: 16px;
+            color: #444;
+            font-style: italic;
+            padding: 15px;
+            border: 1px dashed #333;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            #crt { width: 100vw; height: 100vh; border-radius: 0; }
+            .screen { padding: 15px; }
+            .hud { grid-template-columns: repeat(3, 1fr); }
+            .shop-grid { grid-template-columns: 1fr; }
+            .title-art { font-size: 7px; }
+            .story-photo { max-height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="crt">
+    <!-- TITLE SCREEN -->
+    <div id="title-screen" class="screen active">
+        <div class="title-art" id="title-ascii"></div>
+        <div class="title-subtitle">A Boy Scout Adventure</div>
+        <div class="title-subtitle2">Inspired by The Oregon Trail</div>
+        <div style="margin: 15px 0;">
+            <span class="flag-line">&nbsp;</span>
+            <span class="flag-line">&nbsp;</span>
+            <span class="flag-cross-h">&nbsp;</span>
+            <span class="flag-line">&nbsp;</span>
+            <span class="flag-line">&nbsp;</span>
+        </div>
+        <div style="color: var(--green-dim); font-size: 18px; margin-bottom: 15px;">
+            Stockholm to Storlien ~ 14 Days ~ Summer 2008
+        </div>
+        <button class="press-start blink" onclick="showScreen('setup-screen')">
+            PRESS START
+        </button>
+        <div style="color:#444; font-size:14px; margin-top:20px;">
+            A single-page HTML game ~ No install required
+        </div>
+    </div>
+
+    <!-- SETUP SCREEN -->
+    <div id="setup-screen" class="screen">
+        <div class="setup-box">
+            <h2>REGISTER YOUR PATROL</h2>
+            <div class="form-group">
+                <label>Your Scout Name:</label>
+                <input type="text" id="player-name" placeholder="Enter your name..." maxlength="20" value="">
+            </div>
+            <div class="form-group">
+                <label>Patrol Name:</label>
+                <select id="patrol-name">
+                    <option value="Eagle Patrol">Eagle Patrol</option>
+                    <option value="Wolf Patrol">Wolf Patrol</option>
+                    <option value="Bear Patrol">Bear Patrol</option>
+                    <option value="Fox Patrol">Fox Patrol</option>
+                    <option value="Elk Patrol">Elk Patrol</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy">Scout (Easy)</option>
+                    <option value="normal" selected>Venturer (Normal)</option>
+                    <option value="hard">Rover (Hard)</option>
+                </select>
+            </div>
+            <div style="text-align:center; margin-top:25px;">
+                <button class="press-start" onclick="startSetup()">
+                    CONTINUE TO SHOP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHOP SCREEN -->
+    <div id="shop-screen" class="screen">
+        <div class="shop-header">
+            <h2>SCOUT SUPPLY SHOP - STOCKHOLM</h2>
+            <div class="shop-budget">Budget: <span id="shop-kronor">500</span> SEK</div>
+        </div>
+        <div class="shop-grid" id="shop-grid"></div>
+        <div style="text-align:center;">
+            <button class="press-start" onclick="startJourney()">
+                HIT THE TRAIL!
+            </button>
+        </div>
+    </div>
+
+    <!-- TRAVEL / MAIN GAME SCREEN -->
+    <div id="travel-screen" class="screen">
+        <div class="hud">
+            <div class="stat">
+                <div class="stat-label">Health</div>
+                <div class="stat-bar"><div class="stat-fill health" id="bar-health" style="width:100%"></div></div>
+                <div class="stat-value good" id="val-health">100</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Food</div>
+                <div class="stat-bar"><div class="stat-fill food" id="bar-food" style="width:100%"></div></div>
+                <div class="stat-value good" id="val-food">100</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Morale</div>
+                <div class="stat-bar"><div class="stat-fill morale" id="bar-morale" style="width:100%"></div></div>
+                <div class="stat-value good" id="val-morale">100</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Energy</div>
+                <div class="stat-bar"><div class="stat-fill energy" id="bar-energy" style="width:100%"></div></div>
+                <div class="stat-value good" id="val-energy">100</div>
+            </div>
+            <div class="kronor-display">
+                <div class="stat-label">Kronor</div>
+                <div id="val-kronor" style="margin-top:3px;">500 SEK</div>
+            </div>
+        </div>
+
+        <div class="journey-progress">
+            <div class="journey-fill" id="journey-fill" style="width:0%"></div>
+            <div class="journey-marker" id="journey-marker" style="left:0%"></div>
+        </div>
+        <div class="journey-labels">
+            <span>Stockholm</span>
+            <span>Storlien</span>
+        </div>
+
+        <div class="day-header">
+            <span class="day-number" id="day-number">DAY 1 / 14</span>
+            <span class="location-name" id="location-name">Stockholm</span>
+            <span class="weather-display" id="weather-display">Sunny</span>
+        </div>
+
+        <div class="scene-art" id="scene-art"></div>
+        <img id="scene-photo" style="display:none; width:100%; max-height:90px; object-fit:cover; border:2px solid var(--sweden-yellow); margin:3px 0; border-radius:4px; cursor:pointer;" onclick="this.style.maxHeight = this.style.maxHeight === '90px' ? '250px' : '90px'" />
+
+        <div class="narrative" id="narrative">
+            Welcome to Sweden...
+        </div>
+
+        <div class="choices" id="choices"></div>
+    </div>
+
+    <!-- RESULT OVERLAY -->
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-box">
+            <h3 id="result-title" style="color: var(--green);">RESULT</h3>
+            <div class="result-text" id="result-text"></div>
+            <div class="stat-changes" id="stat-changes"></div>
+            <button class="press-start" onclick="closeResult()">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- REAL STORY OVERLAY -->
+    <div class="story-overlay" id="story-overlay">
+        <div class="story-card">
+            <div class="story-card-header">FROM THE REAL TRIP</div>
+            <div class="story-card-location" id="story-location"></div>
+            <img class="story-photo" id="story-photo" alt="Trip photo" />
+            <div class="story-photo-caption" id="story-caption"></div>
+            <div class="story-text" id="story-text"></div>
+            <div class="story-placeholder" id="story-placeholder">
+                No story yet for this day. Edit data/story.json to add your memories!
+            </div>
+            <button class="press-start" onclick="closeStory()">NEXT DAY</button>
+        </div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="gameover-screen" class="screen">
+        <div class="end-title" style="color: var(--red);">GAME OVER</div>
+        <div class="end-art" id="gameover-art" style="color: var(--red);"></div>
+        <div class="end-summary" id="gameover-summary"></div>
+        <div class="stats-recap" id="gameover-stats"></div>
+        <button class="press-start" onclick="location.reload()" style="margin-top:20px;">TRY AGAIN</button>
+    </div>
+
+    <!-- VICTORY SCREEN -->
+    <div id="victory-screen" class="screen">
+        <div class="end-title" style="color: var(--sweden-yellow);">CONGRATULATIONS!</div>
+        <div class="end-art" id="victory-art" style="color: var(--sweden-yellow);"></div>
+        <div class="end-summary" id="victory-summary"></div>
+        <div class="stats-recap" id="victory-stats"></div>
+        <button class="press-start" onclick="location.reload()" style="margin-top:20px;">PLAY AGAIN</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  LOAD PERSONAL STORY DATA FROM data/story.json
+// ============================================================
+
+let storyData = null;
+
+async function loadStoryData() {
+    try {
+        const resp = await fetch('data/story.json');
+        if (resp.ok) {
+            storyData = await resp.json();
+            console.log('Story data loaded:', storyData.days.length, 'days');
+        }
+    } catch (e) {
+        console.log('No story data found (data/story.json). Game works fine without it.');
+    }
+}
+loadStoryData();
+
+// ============================================================
+//  GAME DATA
+// ============================================================
+
+const LOCATIONS = [
+    { name: "Stockholm", desc: "The capital city. Your adventure begins at the central station.", type: "city" },
+    { name: "Sigtuna", desc: "Sweden's oldest town, founded by the Vikings around 980 AD.", type: "town" },
+    { name: "Uppsala", desc: "An ancient university city with a massive cathedral.", type: "city" },
+    { name: "Sala Silvergruva", desc: "A region of old silver mines and deep forests.", type: "wilderness" },
+    { name: "Lake Siljan", desc: "A beautiful meteor crater lake in the heart of Dalarna.", type: "lake" },
+    { name: "Mora", desc: "Gateway to the Dalarna wilderness. Home of the Vasaloppet.", type: "town" },
+    { name: "Orsa Finnmark", desc: "Dense boreal forest. Bear country.", type: "wilderness" },
+    { name: "Fulufjallet", desc: "A national park with Sweden's highest waterfall, Njupeskar.", type: "mountain" },
+    { name: "Idre", desc: "A small mountain village near the Norwegian border.", type: "mountain" },
+    { name: "Grovelsjon", desc: "A pristine alpine lake surrounded by mountains.", type: "lake" },
+    { name: "Rogen Reserve", desc: "A nature reserve of endless lakes and rocky terrain.", type: "wilderness" },
+    { name: "Funäsdalen", desc: "A fjeld village. The air is crisp and cold even in summer.", type: "mountain" },
+    { name: "Sylarna", desc: "A legendary mountain station. The final push.", type: "mountain" },
+    { name: "Storlien", desc: "The Norwegian border! You made it!", type: "town" }
+];
+
+const WEATHER_TYPES = [
+    { name: "Sunny", icon: "[ SUN ]", effect: { energy: 5, morale: 5 }, chance: 0.3 },
+    { name: "Cloudy", icon: "[CLOUD]", effect: {}, chance: 0.25 },
+    { name: "Rainy", icon: "[ RAIN]", effect: { energy: -5, morale: -5 }, chance: 0.2 },
+    { name: "Stormy", icon: "[STORM]", effect: { energy: -10, morale: -10, health: -5 }, chance: 0.1 },
+    { name: "Misty", icon: "[ MIST]", effect: { morale: -3 }, chance: 0.1 },
+    { name: "Perfect", icon: "[IDEAL]", effect: { energy: 10, morale: 10, health: 5 }, chance: 0.05 }
+];
+
+const SHOP_ITEMS = [
+    { id: "food1", name: "Trail Mix (x5)", desc: "+25 Food", price: 60, effect: { food: 25 }, max: 3 },
+    { id: "food2", name: "Canned Goods (x8)", desc: "+40 Food", price: 100, effect: { food: 40 }, max: 2 },
+    { id: "med", name: "First Aid Kit", desc: "+30 Health reserve", price: 80, effect: { healthReserve: 30 }, max: 2 },
+    { id: "rain", name: "Rain Gear", desc: "Reduces rain penalties", price: 90, effect: { rainProtect: true }, max: 1 },
+    { id: "compass", name: "Compass & Map", desc: "Better navigation", price: 70, effect: { navigation: true }, max: 1 },
+    { id: "rod", name: "Fishing Rod", desc: "Can fish for food", price: 50, effect: { canFish: true }, max: 1 },
+    { id: "book", name: "Swedish Phrasebook", desc: "+Morale with locals", price: 30, effect: { phrasebook: true }, max: 1 },
+    { id: "tent", name: "Quality Tent", desc: "Better rest at camp", price: 120, effect: { betterTent: true }, max: 1 },
+    { id: "stove", name: "Portable Stove", desc: "Cook hot meals (+morale)", price: 60, effect: { stove: true }, max: 1 },
+    { id: "guitar", name: "Travel Guitar", desc: "Campfire songs (+morale)", price: 40, effect: { guitar: true }, max: 1 }
+];
+
+const SCENE_ART = {
+    city: `
+     _______
+    |  ___  |   ___     __|__
+    | |   | |  |   |   |     |
+    | |   | |  |   |   |  _  |
+    | |___| |  |___|   | | | |
+    |_______|__|___|____|_|_|_|___
+    /  /  /  /  /  /  /  /  /  /
+    `,
+    town: `
+       /\\        .  *
+      /  \\   /\\     .     *
+     / /\\ \\ /  \\  .    *
+    / /  \\_/ /\\ \\    .
+   /____________\\ *    .
+   |  []    []  |   .
+   |    ____    |  .   *
+   |___|    |___|
+    `,
+    wilderness: `
+     .  *  .    *  .  *    .
+   \\|/  \\|/    \\|/   \\|/
+    |    |  \\|/  |     |
+   /|\\  /|\\ |  /|\\   /|\\
+    |    |  /|\\  |     |
+   _|_  _|_  |  _|_  _|_
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    `,
+    lake: `
+              ___
+     /\\      /   \\     /\\
+    /  \\    /     \\   /  \\
+   /    \\  /       \\ /    \\
+  ~~~~~~~~ ~~~~~~~~~ ~~~~~~~~
+   ~    ~    ~    ~    ~    ~
+     ~    ~    ~    ~    ~
+    `,
+    mountain: `
+          /\\
+         /  \\        /\\
+        / /\\ \\      /  \\
+       / /  \\ \\    / /\\ \\
+      / /    \\ \\  / /  \\ \\
+     /_/      \\_\\/_/    \\_\\
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    `
+};
+
+const VICTORY_ART = `
+     *    *  CONGRATULATIONS  *    *
+        ___________
+       '._==_==_=_.'      *
+       .-\\:      /-.
+      | (|:.     |) |    *
+       '-|:.     |-'
+         \\::.    /     *
+          '::. .'
+     *      ) (        *
+           _) (_
+          '------'      *
+`;
+
+const GAMEOVER_ART = `
+         _____
+        /     \\
+       | () () |
+        \\  ^  /
+         |||||
+         |||||
+    `;
+
+// ============================================================
+//  EVENTS DATABASE
+// ============================================================
+
+function getEvents(locationType, day) {
+    const allEvents = [
+        // ---- WILDERNESS EVENTS ----
+        {
+            types: ["wilderness", "mountain"],
+            title: "Moose Encounter!",
+            text: "A massive moose blocks the forest trail, staring at your patrol with calm indifference.",
+            choices: [
+                { text: "Wait patiently for it to move", effects: { energy: -5 }, result: "You wait 30 minutes. The moose eventually wanders off. Patience is a scout virtue." },
+                { text: "Try to sneak around it quietly", effects: { energy: -10 }, result: "You carefully navigate through the brush. A branch snaps and the moose bolts - but away from you. Close call!", risk: { chance: 0.3, effects: { health: -15 }, result: "The moose charges! You dive behind a tree just in time, but scrape your knee badly." } },
+                { text: "Take photos from a safe distance", effects: { morale: 10 }, result: "You capture incredible photos. The moose poses majestically. This will be the trip's best story!" }
+            ]
+        },
+        {
+            types: ["wilderness"],
+            title: "Berry Bonanza!",
+            text: "You stumble upon a massive patch of wild blueberries (blabär) covering a sunny hillside.",
+            choices: [
+                { text: "Spend time picking berries", effects: { food: 20, energy: -5, morale: 10 }, result: "You fill every container you have. Swedish wild blueberries are unbelievably sweet!" },
+                { text: "Eat some and keep hiking", effects: { food: 8, morale: 5 }, result: "You munch handfuls of berries as you walk. Purple-stained fingers and happy faces all around." },
+                { text: "Skip them, keep moving", effects: {}, result: "You push on. Sometimes the trail waits for no one." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain"],
+            title: "Lost Trail!",
+            text: "The trail markers have faded and your patrol reaches a confusing fork. Which way?",
+            choices: [
+                { text: "Check the compass and map carefully", effects: { energy: -5 }, result: "Careful navigation pays off. You find the right trail after studying the terrain.", needsItem: "navigation", altResult: "Without a proper compass, you guess... and get lucky this time.", altEffects: { energy: -15 } },
+                { text: "Follow the river downstream", effects: { energy: -10 }, result: "Rivers lead to civilization. It takes longer but you find your way back to the marked trail." },
+                { text: "Climb a tree for a better view", effects: { energy: -10 }, result: "From the treetop, you spot a church steeple in the distance and orient yourselves.", risk: { chance: 0.2, effects: { health: -20, energy: -10 }, result: "A branch breaks! You fall and twist your ankle badly. The patrol has to help you walk." } }
+            ]
+        },
+        {
+            types: ["wilderness", "lake"],
+            title: "Mosquito Swarm!",
+            text: "Clouds of mosquitoes descend on your campsite. Swedish summer mosquitoes are legendary.",
+            choices: [
+                { text: "Build a smoky campfire", effects: { morale: -5, energy: -5 }, result: "The smoke drives most of them away. Your eyes sting but at least the biting stops." },
+                { text: "Retreat into the tents", effects: { morale: -10 }, result: "You hide in tents for hours. Boring, but at least you're not getting bitten." },
+                { text: "Push through with determination", effects: { health: -10, morale: -10 }, result: "You try to tough it out. By morning, everyone is covered in itchy red welts." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain"],
+            title: "Campfire Stories",
+            text: "Night falls and the patrol gathers around the campfire. The stars are incredible this far north.",
+            choices: [
+                { text: "Tell scary stories", effects: { morale: 10 }, result: "Ghost stories in the Swedish wilderness hit different. Everyone is terrified and loving it." },
+                { text: "Play guitar and sing scout songs", effects: { morale: 20 }, result: "The music echoes through the forest. Even some hikers at a nearby camp join in!", needsItem: "guitar", altResult: "You sing scout songs a cappella. Not as atmospheric, but still good fun.", altEffects: { morale: 8 } },
+                { text: "Early to bed, early to rise", effects: { energy: 15, health: 5 }, result: "A good night's sleep is sometimes the best choice. You wake refreshed and ready." }
+            ]
+        },
+        // ---- LAKE EVENTS ----
+        {
+            types: ["lake"],
+            title: "Swimming Spot!",
+            text: "You discover a perfect swimming spot. The lake water is crystal clear and surprisingly warm.",
+            choices: [
+                { text: "Everyone goes swimming!", effects: { morale: 20, energy: 10, food: -5 }, result: "You spend a glorious afternoon swimming and diving. This is what summer is about!" },
+                { text: "Quick dip then move on", effects: { morale: 10, energy: 5 }, result: "A refreshing swim revitalizes the whole patrol. Back on the trail with renewed energy!" },
+                { text: "Go fishing instead", effects: { food: 25, morale: 5 }, result: "You catch several perch and a pike! Fresh fish for dinner tonight!", needsItem: "canFish", altResult: "You try to catch fish with your hands. Hilarious to watch but you catch nothing.", altEffects: { morale: 5 } }
+            ]
+        },
+        {
+            types: ["lake"],
+            title: "Canoe Found!",
+            text: "An old canoe sits by the lakeshore with a sign: 'Free to use - return when done.'",
+            choices: [
+                { text: "Paddle across the lake", effects: { energy: -10, morale: 15 }, result: "Canoeing across a Swedish lake at sunset. This is a core memory being formed right now." },
+                { text: "Go around on foot", effects: { energy: -15 }, result: "The long way around takes extra energy, but the shoreline trail has beautiful views." },
+                { text: "Rest here and enjoy the view", effects: { energy: 15, morale: 10 }, result: "Sometimes you need to stop and take it all in. The lake reflects the sky like a mirror." }
+            ]
+        },
+        // ---- TOWN/CITY EVENTS ----
+        {
+            types: ["city", "town"],
+            title: "Fika Time!",
+            text: "You pass a charming cafe. The smell of fresh cinnamon buns (kanelbullar) is irresistible.",
+            choices: [
+                { text: "Stop for fika (coffee & buns)", effects: { morale: 20, energy: 10, kronor: -40 }, result: "The kanelbullar are warm and perfect. Swedish fika culture is a beautiful thing." },
+                { text: "Buy some for the road", effects: { food: 15, morale: 10, kronor: -25 }, result: "You buy a bag of pastries. They won't last long but they're delicious while they do." },
+                { text: "Window shop and move on", effects: { morale: -5 }, result: "You resist temptation. The disappointed faces of your patrol haunt you slightly." }
+            ]
+        },
+        {
+            types: ["city", "town"],
+            title: "Friendly Locals",
+            text: "A Swedish family notices your scout uniforms and waves you over with big smiles.",
+            choices: [
+                { text: "Chat with them (use phrasebook)", effects: { morale: 15, food: 10 }, result: "They're delighted you try Swedish! They share homemade meatballs and lingonberry jam.", needsItem: "phrasebook", altResult: "You communicate with gestures and laughs. They share some snacks with you.", altEffects: { morale: 10, food: 5 } },
+                { text: "Accept their help politely", effects: { morale: 10 }, result: "They give you tips about the trail ahead and the best camping spots. Swedes are so kind!" },
+                { text: "Thank them and continue", effects: { morale: 5 }, result: "You wave and keep going. Short but sweet encounter." }
+            ]
+        },
+        {
+            types: ["town"],
+            title: "Local Market!",
+            text: "A small town market is in full swing. Local farmers sell fresh produce and smoked fish.",
+            choices: [
+                { text: "Stock up on food supplies", effects: { food: 30, kronor: -50 }, result: "You buy smoked salmon, hard bread, and local cheese. Trail food upgrade!" },
+                { text: "Buy a small souvenir", effects: { morale: 10, kronor: -30 }, result: "You find a hand-carved Dala horse. A perfect memento of Dalarna." },
+                { text: "Just browse and enjoy", effects: { morale: 5 }, result: "The market atmosphere is wonderful. You soak it in without spending a krona." }
+            ]
+        },
+        // ---- MOUNTAIN EVENTS ----
+        {
+            types: ["mountain"],
+            title: "Steep Climb!",
+            text: "The trail goes straight up a rocky mountainside. It's going to be a tough ascent.",
+            choices: [
+                { text: "Power through the climb", effects: { energy: -20, morale: 10 }, result: "Exhausting but the view from the top is absolutely breathtaking. Worth every step." },
+                { text: "Take it slow with breaks", effects: { energy: -10 }, result: "Slow and steady wins the race. You make it up without burning out." },
+                { text: "Find an alternate route around", effects: { energy: -15, morale: -5 }, result: "The detour adds distance but saves your legs. Not as scenic though." }
+            ]
+        },
+        {
+            types: ["mountain"],
+            title: "Mountain Stream",
+            text: "A crystal-clear mountain stream crosses your path. The water looks incredibly refreshing.",
+            choices: [
+                { text: "Fill up water bottles and rest", effects: { energy: 15, health: 5 }, result: "The water is ice-cold and pure. You rest by the stream feeling grateful." },
+                { text: "Cook a hot meal by the stream", effects: { food: -10, energy: 15, morale: 15, health: 5 }, result: "Hot soup by a mountain stream. This is peak scouting.", needsItem: "stove", altResult: "You eat a cold lunch by the stream. Still nice, but a hot meal would've been better.", altEffects: { food: -5, energy: 10, morale: 5 } },
+                { text: "Quick splash and keep moving", effects: { energy: 5 }, result: "A quick refresh and you're back on the trail." }
+            ]
+        },
+        // ---- UNIVERSAL EVENTS ----
+        {
+            types: ["wilderness", "mountain", "lake", "town", "city"],
+            title: "Twisted Ankle!",
+            text: "One of your patrol members steps wrong on a root and twists their ankle badly.",
+            choices: [
+                { text: "Apply first aid and bandage it", effects: { health: 10, energy: -5 }, result: "Your first aid training pays off. You stabilize the ankle and they can walk with support.", needsItem: "healthReserve", altResult: "Without proper supplies, you improvise a bandage from a t-shirt. It's rough but functional.", altEffects: { health: -5, energy: -10 } },
+                { text: "Rest for a few hours", effects: { energy: -10, health: 5 }, result: "The rest helps. The ankle swells but they can walk carefully." },
+                { text: "Push through despite the pain", effects: { health: -15, morale: -10 }, result: "Forcing it was a bad idea. The ankle gets worse and everyone's spirits drop." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain", "lake", "town", "city"],
+            title: "Rain Hits Hard!",
+            text: "Dark clouds roll in fast. Within minutes, a heavy downpour soaks everything.",
+            choices: [
+                { text: "Set up rain shelter quickly", effects: { energy: -5 }, result: "Your quality gear keeps you mostly dry. Good preparation!", needsItem: "rainProtect", altResult: "Without proper rain gear, everyone gets soaked. Miserable.", altEffects: { health: -10, morale: -10, energy: -10 } },
+                { text: "Find natural shelter (trees/rocks)", effects: { energy: -10, morale: -5 }, result: "You huddle under a rock overhang. Not comfortable, but you stay mostly dry." },
+                { text: "Keep hiking in the rain", effects: { health: -10, energy: -15, morale: -5 }, result: "You push through but everyone is cold, wet, and miserable by evening." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain", "lake"],
+            title: "Northern Lights!",
+            text: "Wait... is that... THE NORTHERN LIGHTS! A faint green glow dances across the sky!",
+            choices: [
+                { text: "Stay up all night watching", effects: { morale: 30, energy: -15 }, result: "The aurora intensifies into waves of green and purple. A once-in-a-lifetime experience. Nobody sleeps and nobody cares." },
+                { text: "Watch for a while then sleep", effects: { morale: 20, energy: -5 }, result: "You enjoy the show for an hour. Magical. Then a sensible bedtime." },
+                { text: "Take photos and rest", effects: { morale: 15 }, result: "You snap some photos (they don't do it justice) and head to bed with a smile." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain", "lake", "town"],
+            title: "Scout Challenge!",
+            text: "The patrol leader announces a scout skills competition: fire-starting, knots, and orienteering.",
+            choices: [
+                { text: "Go all in on the competition", effects: { energy: -15, morale: 20 }, result: "Fierce but friendly competition! Your clove hitch is unbeatable. Scout spirit at its finest!" },
+                { text: "Participate casually", effects: { energy: -5, morale: 10 }, result: "You have fun without stressing. Everyone learns something new." },
+                { text: "Sit this one out and rest", effects: { energy: 10, morale: -5 }, result: "You watch from the sidelines. Restful but you feel a bit left out." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain", "lake"],
+            title: "Midnight Sun!",
+            text: "At 11 PM, the sun is still above the horizon. The sky is a stunning gradient of orange and gold.",
+            choices: [
+                { text: "Go for a midnight hike", effects: { energy: -10, morale: 20 }, result: "Hiking at midnight in broad daylight. Your sense of time is completely destroyed - and you love it." },
+                { text: "Sit and watch the sunset that never comes", effects: { morale: 15 }, result: "You sit in peaceful awe. The sun dips to the horizon and rises back up. Surreal." },
+                { text: "Try to sleep (good luck)", effects: { energy: 5, morale: -5 }, result: "You pull a shirt over your eyes. Sleep comes eventually, but the light keeps peeking in." }
+            ]
+        },
+        {
+            types: ["city", "town"],
+            title: "Swedish Supermarket!",
+            text: "You find an ICA supermarket. Time to resupply?",
+            choices: [
+                { text: "Buy a big resupply", effects: { food: 35, kronor: -60 }, result: "Knäckebröd, cheese in a tube, and Swedish chocolate. Your packs are heavy but full." },
+                { text: "Buy just essentials", effects: { food: 15, kronor: -25 }, result: "Just the basics. Water, bread, and some apples." },
+                { text: "Buy candy (godis)", effects: { morale: 15, food: 5, kronor: -20 }, result: "Saturday candy (lördagsgodis) on a weekday? In Sweden that's basically illegal. Worth it." }
+            ]
+        },
+        {
+            types: ["wilderness", "mountain"],
+            title: "Wild Reindeer!",
+            text: "A small herd of reindeer grazes nearby. They watch you with curious eyes.",
+            choices: [
+                { text: "Approach slowly for photos", effects: { morale: 15 }, result: "You get incredibly close. One even sniffs your hand before trotting off. Magical!" },
+                { text: "Observe from a distance", effects: { morale: 10 }, result: "You watch them graze peacefully. Nature at its most serene." },
+                { text: "Keep quiet and pass by", effects: {}, result: "You tiptoe past without disturbing them. Respectful wilderness travel." }
+            ]
+        },
+        {
+            types: ["wilderness", "lake", "mountain"],
+            title: "Tent Trouble!",
+            text: "You wake up to find one of the tents has partially collapsed overnight.",
+            choices: [
+                { text: "Fix it properly (takes time)", effects: { energy: -10 }, result: "You re-stake everything and reinforce the poles. Good as new.", needsItem: "betterTent", altResult: "The cheap tent is hard to fix. You do your best but it's still wobbly.", altEffects: { energy: -10, morale: -5 } },
+                { text: "Quick fix and hope for the best", effects: { morale: -5 }, result: "A quick patch job. It'll hold... probably." },
+                { text: "Sleep under the stars tonight", effects: { morale: 10, health: -5 }, result: "The sky is beautiful but the mosquitoes find you. Mixed experience." }
+            ]
+        },
+        {
+            types: ["town", "city"],
+            title: "Museum Visit!",
+            text: "You pass a small local museum. The sign says 'Free entry for scouts!'",
+            choices: [
+                { text: "Spend time exploring the museum", effects: { morale: 15, energy: -5 }, result: "Viking artifacts and local history. Education AND entertainment. Your scout leader would be proud." },
+                { text: "Quick walk-through", effects: { morale: 8 }, result: "A brief visit. You learn about the Sami people and their reindeer herding traditions." },
+                { text: "Skip it, keep moving", effects: {}, result: "No time for culture today. The trail calls." }
+            ]
+        },
+        {
+            types: ["wilderness", "lake", "mountain"],
+            title: "Bear Tracks!",
+            text: "Fresh bear tracks cross your path. They're BIG. The patrol goes quiet.",
+            choices: [
+                { text: "Make lots of noise and press on", effects: { energy: -5, morale: -5 }, result: "You clap, sing, and bang pots. No bear in sight. Probably scared it off. Probably." },
+                { text: "Detour around the area", effects: { energy: -15 }, result: "Better safe than sorry. The detour is tiring but you avoid any bear encounter." },
+                { text: "Set up camp early (safety)", effects: { energy: 10, morale: -5, food: -5 }, result: "You camp in a clearing with good visibility. Bear canisters secured. Restless night but safe." }
+            ]
+        }
+    ];
+
+    // Filter events valid for this location type
+    const valid = allEvents.filter(e => e.types.includes(locationType));
+    // Shuffle and return
+    return valid.sort(() => Math.random() - 0.5);
+}
+
+// ============================================================
+//  GAME STATE
+// ============================================================
+
+const state = {
+    playerName: "Scout",
+    patrolName: "Eagle Patrol",
+    difficulty: "normal",
+    day: 1,
+    health: 100,
+    food: 100,
+    morale: 80,
+    energy: 100,
+    kronor: 500,
+    inventory: {},
+    usedEvents: new Set(),
+    currentEvent: null,
+    phase: "title", // title, setup, shop, travel, event, result, gameover, victory
+    difficultyMod: 1
+};
+
+// ============================================================
+//  AUDIO ENGINE (Simple Web Audio)
+// ============================================================
+
+const AudioEngine = {
+    ctx: null,
+    init() {
+        try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e) {}
+    },
+    playTone(freq, duration, type = 'square', volume = 0.08) {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+    },
+    click() { this.playTone(800, 0.05); },
+    good() {
+        this.playTone(523, 0.1);
+        setTimeout(() => this.playTone(659, 0.1), 100);
+        setTimeout(() => this.playTone(784, 0.15), 200);
+    },
+    bad() {
+        this.playTone(300, 0.15);
+        setTimeout(() => this.playTone(250, 0.2), 150);
+    },
+    epic() {
+        [523, 659, 784, 1047].forEach((f, i) => {
+            setTimeout(() => this.playTone(f, 0.2, 'square', 0.06), i * 150);
+        });
+    },
+    gameover() {
+        [400, 350, 300, 200].forEach((f, i) => {
+            setTimeout(() => this.playTone(f, 0.3, 'sawtooth', 0.05), i * 250);
+        });
+    }
+};
+
+// ============================================================
+//  UI HELPERS
+// ============================================================
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    AudioEngine.click();
+}
+
+function typeText(element, text, speed = 15) {
+    element.textContent = '';
+    let i = 0;
+    element.classList.add('typewriter');
+    const interval = setInterval(() => {
+        element.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+            clearInterval(interval);
+            element.classList.remove('typewriter');
+        }
+    }, speed);
+}
+
+function updateHUD() {
+    const stats = ['health', 'food', 'morale', 'energy'];
+    stats.forEach(s => {
+        const val = Math.max(0, Math.min(100, state[s]));
+        const bar = document.getElementById(`bar-${s}`);
+        const valEl = document.getElementById(`val-${s}`);
+        bar.style.width = val + '%';
+        valEl.textContent = Math.round(val);
+        valEl.className = 'stat-value ' + (val <= 20 ? 'danger' : val <= 50 ? 'warning' : 'good');
+    });
+    document.getElementById('val-kronor').textContent = state.kronor + ' SEK';
+
+    // Journey progress
+    const progress = ((state.day - 1) / 13) * 100;
+    document.getElementById('journey-fill').style.width = progress + '%';
+    document.getElementById('journey-marker').style.left = progress + '%';
+
+    // Day and location
+    document.getElementById('day-number').textContent = `DAY ${state.day} / 14`;
+    document.getElementById('location-name').textContent = LOCATIONS[state.day - 1].name;
+}
+
+function getStatClass(val) {
+    return val > 0 ? 'positive' : 'negative';
+}
+
+// ============================================================
+//  TITLE SCREEN
+// ============================================================
+
+const TITLE_ASCII = `
+ ____                    _             _____          _ _
+/ ___|_      _____  __ _| | ___ _ __  |_   _| __ __ _(_) |
+\\___ \\ \\ /\\ / / _ \\/ _\` | |/ _ \\ '_ \\   | || '__/ _\` | | |
+ ___) \\ V  V /  __/ (_| |  __/ | | |  | || | | (_| | | |
+|____/ \\_/\\_/ \\___|\\__,_|\\___|_| |_|  |_||_|  \\__,_|_|_|
+`;
+
+document.getElementById('title-ascii').textContent = TITLE_ASCII;
+
+// ============================================================
+//  SETUP
+// ============================================================
+
+function startSetup() {
+    AudioEngine.init();
+    state.playerName = document.getElementById('player-name').value.trim() || 'Scout';
+    state.patrolName = document.getElementById('patrol-name').value;
+    state.difficulty = document.getElementById('difficulty').value;
+
+    switch(state.difficulty) {
+        case 'easy': state.difficultyMod = 0.6; state.kronor = 600; break;
+        case 'normal': state.difficultyMod = 1.0; state.kronor = 500; break;
+        case 'hard': state.difficultyMod = 1.4; state.kronor = 400; break;
+    }
+
+    renderShop();
+    showScreen('shop-screen');
+}
+
+// ============================================================
+//  SHOP
+// ============================================================
+
+function renderShop() {
+    const grid = document.getElementById('shop-grid');
+    grid.innerHTML = '';
+    document.getElementById('shop-kronor').textContent = state.kronor;
+
+    SHOP_ITEMS.forEach(item => {
+        const qty = state.inventory[item.id] || 0;
+        const div = document.createElement('div');
+        div.className = 'shop-item' + (qty > 0 ? ' bought' : '');
+        div.innerHTML = `
+            <div class="shop-item-name">${item.name}</div>
+            <div class="shop-item-desc">${item.desc}</div>
+            <div class="shop-item-price">${item.price} SEK</div>
+            ${qty > 0 ? `<div class="shop-item-qty">x${qty}</div>` : ''}
+        `;
+        div.onclick = () => buyItem(item);
+        grid.appendChild(div);
+    });
+}
+
+function buyItem(item) {
+    const qty = state.inventory[item.id] || 0;
+    if (qty >= item.max) return;
+    if (state.kronor < item.price) return;
+
+    state.kronor -= item.price;
+    state.inventory[item.id] = qty + 1;
+    AudioEngine.good();
+    renderShop();
+}
+
+// ============================================================
+//  JOURNEY START
+// ============================================================
+
+function startJourney() {
+    // Calculate starting food from purchases
+    let bonusFood = 0;
+    if (state.inventory['food1']) bonusFood += state.inventory['food1'] * 25;
+    if (state.inventory['food2']) bonusFood += state.inventory['food2'] * 40;
+    state.food = Math.min(100, 60 + bonusFood);
+
+    state.day = 1;
+    showScreen('travel-screen');
+    updateHUD();
+    startDay();
+}
+
+// ============================================================
+//  DAILY CYCLE
+// ============================================================
+
+function startDay() {
+    if (state.day > 14) {
+        victory();
+        return;
+    }
+
+    const loc = LOCATIONS[state.day - 1];
+
+    // Pick weather
+    const roll = Math.random();
+    let cumulative = 0;
+    let weather = WEATHER_TYPES[1]; // default cloudy
+    for (const w of WEATHER_TYPES) {
+        cumulative += w.chance;
+        if (roll <= cumulative) { weather = w; break; }
+    }
+
+    document.getElementById('weather-display').textContent = `${weather.icon} ${weather.name}`;
+
+    // Apply weather effects
+    if (weather.effect) {
+        for (const [key, val] of Object.entries(weather.effect)) {
+            if (key in state) {
+                let mod = val;
+                // Rain gear helps
+                if ((weather.name === 'Rainy' || weather.name === 'Stormy') && state.inventory['rain']) {
+                    mod = Math.round(val * 0.3);
+                }
+                state[key] = Math.max(0, Math.min(100, state[key] + mod));
+            }
+        }
+    }
+
+    // Daily food consumption
+    state.food = Math.max(0, state.food - (5 * state.difficultyMod));
+
+    // If no food, lose health
+    if (state.food <= 0) {
+        state.health = Math.max(0, state.health - (10 * state.difficultyMod));
+    }
+
+    // Better tent bonus
+    if (state.inventory['tent']) {
+        state.energy = Math.min(100, state.energy + 5);
+        state.health = Math.min(100, state.health + 2);
+    }
+
+    // Scene art or real photo
+    const artEl = document.getElementById('scene-art');
+    const scenePhoto = document.getElementById('scene-photo');
+    const dayData = storyData && storyData.days ? storyData.days.find(d => d.day === state.day) : null;
+    if (dayData && dayData.photo) {
+        artEl.style.display = 'none';
+        scenePhoto.src = dayData.photo;
+        scenePhoto.style.display = 'block';
+        scenePhoto.style.maxHeight = '90px';
+    } else {
+        scenePhoto.style.display = 'none';
+        artEl.style.display = 'flex';
+        artEl.textContent = SCENE_ART[loc.type] || SCENE_ART.wilderness;
+    }
+
+    updateHUD();
+
+    // Check game over
+    if (state.health <= 0) {
+        gameover("health");
+        return;
+    }
+
+    // Pick an event
+    const events = getEvents(loc.type, state.day);
+    const event = events.find(e => !state.usedEvents.has(e.title)) || events[0];
+    state.usedEvents.add(event.title);
+    state.currentEvent = event;
+
+    // Show narrative
+    const narrative = document.getElementById('narrative');
+    narrative.textContent = '';
+    typeText(narrative, `${loc.desc}\n\n${event.text}`);
+
+    // Show choices
+    const choicesEl = document.getElementById('choices');
+    choicesEl.innerHTML = '';
+
+    event.choices.forEach((choice, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = `${idx + 1}. ${choice.text}`;
+        btn.onclick = () => makeChoice(choice);
+        choicesEl.appendChild(btn);
+    });
+}
+
+// ============================================================
+//  CHOICE RESOLUTION
+// ============================================================
+
+function makeChoice(choice) {
+    AudioEngine.click();
+
+    // Determine if item-dependent
+    let resultText = choice.result;
+    let effects = { ...choice.effects };
+
+    if (choice.needsItem) {
+        const hasItem = state.inventory[choice.needsItem] ||
+                       (choice.needsItem === 'navigation' && state.inventory['compass']) ||
+                       (choice.needsItem === 'canFish' && state.inventory['rod']) ||
+                       (choice.needsItem === 'healthReserve' && state.inventory['med']) ||
+                       (choice.needsItem === 'rainProtect' && state.inventory['rain']) ||
+                       (choice.needsItem === 'betterTent' && state.inventory['tent']) ||
+                       (choice.needsItem === 'stove' && state.inventory['stove']) ||
+                       (choice.needsItem === 'guitar' && state.inventory['guitar']) ||
+                       (choice.needsItem === 'phrasebook' && state.inventory['book']);
+        if (!hasItem && choice.altResult) {
+            resultText = choice.altResult;
+            effects = choice.altEffects || effects;
+        }
+    }
+
+    // Risk check
+    if (choice.risk && Math.random() < choice.risk.chance * state.difficultyMod) {
+        resultText = choice.risk.result;
+        effects = choice.risk.effects;
+        AudioEngine.bad();
+    } else if (Object.values(effects).some(v => v < -5)) {
+        AudioEngine.bad();
+    } else {
+        AudioEngine.good();
+    }
+
+    // Apply effects
+    const changes = [];
+    for (const [key, val] of Object.entries(effects)) {
+        if (key === 'kronor') {
+            state.kronor = Math.max(0, state.kronor + val);
+            changes.push({ stat: 'Kronor', val: val, display: (val > 0 ? '+' : '') + val + ' SEK' });
+        } else if (key in state) {
+            const modified = Math.round(val * (val < 0 ? state.difficultyMod : 1));
+            state[key] = Math.max(0, Math.min(100, state[key] + modified));
+            const statName = key.charAt(0).toUpperCase() + key.slice(1);
+            changes.push({ stat: statName, val: modified, display: (modified > 0 ? '+' : '') + modified });
+        }
+    }
+
+    // Show result overlay
+    const overlay = document.getElementById('result-overlay');
+    document.getElementById('result-title').textContent = state.currentEvent.title;
+    document.getElementById('result-title').style.color =
+        Object.values(effects).some(v => v < -5) ? 'var(--red)' : 'var(--green)';
+    document.getElementById('result-text').textContent = resultText;
+
+    const changesEl = document.getElementById('stat-changes');
+    changesEl.innerHTML = changes.map(c =>
+        `<div class="stat-change ${c.val >= 0 ? 'positive' : 'negative'}">${c.stat}: ${c.display}</div>`
+    ).join('');
+
+    overlay.classList.add('active');
+    updateHUD();
+}
+
+function closeResult() {
+    AudioEngine.click();
+    document.getElementById('result-overlay').classList.remove('active');
+
+    // Check game over
+    if (state.health <= 0) {
+        gameover("health");
+        return;
+    }
+    if (state.food <= 0 && state.health <= 15) {
+        gameover("starvation");
+        return;
+    }
+    if (state.morale <= 0) {
+        gameover("morale");
+        return;
+    }
+
+    // Show real story for this day (if available), then advance
+    showRealStory(state.day, () => {
+        state.day++;
+        state.energy = Math.min(100, state.energy + 8);
+        if (state.day > 14) {
+            victory();
+        } else {
+            startDay();
+        }
+    });
+}
+
+// ============================================================
+//  REAL STORY INTERSTITIAL
+// ============================================================
+
+let storyCallback = null;
+
+function showRealStory(day, callback) {
+    const dayData = storyData && storyData.days ? storyData.days.find(d => d.day === day) : null;
+    const hasStory = dayData && dayData.realStory && !dayData.realStory.startsWith('Write your');
+    const hasPhoto = dayData && dayData.photo && dayData.photo.length > 0;
+
+    // Skip if no personal content for this day
+    if (!hasStory && !hasPhoto) {
+        callback();
+        return;
+    }
+
+    storyCallback = callback;
+
+    const loc = LOCATIONS[day - 1];
+    document.getElementById('story-location').textContent = `Day ${day} - ${loc.name}`;
+
+    // Photo
+    const photoEl = document.getElementById('story-photo');
+    const captionEl = document.getElementById('story-caption');
+    if (hasPhoto) {
+        photoEl.src = dayData.photo;
+        photoEl.classList.add('loaded');
+        if (dayData.photoCaption) {
+            captionEl.textContent = dayData.photoCaption;
+            captionEl.classList.add('loaded');
+        } else {
+            captionEl.classList.remove('loaded');
+        }
+    } else {
+        photoEl.classList.remove('loaded');
+        captionEl.classList.remove('loaded');
+    }
+
+    // Story text
+    const textEl = document.getElementById('story-text');
+    const placeholderEl = document.getElementById('story-placeholder');
+    if (hasStory) {
+        textEl.textContent = dayData.realStory;
+        textEl.style.display = 'block';
+        placeholderEl.style.display = 'none';
+    } else {
+        textEl.style.display = 'none';
+        placeholderEl.style.display = 'block';
+    }
+
+    document.getElementById('story-overlay').classList.add('active');
+}
+
+function closeStory() {
+    AudioEngine.click();
+    document.getElementById('story-overlay').classList.remove('active');
+    if (storyCallback) {
+        storyCallback();
+        storyCallback = null;
+    }
+}
+
+// ============================================================
+//  GAME OVER
+// ============================================================
+
+function gameover(reason) {
+    AudioEngine.gameover();
+    showScreen('gameover-screen');
+
+    document.getElementById('gameover-art').textContent = GAMEOVER_ART;
+
+    const reasons = {
+        health: `${state.playerName}'s health gave out on Day ${state.day} near ${LOCATIONS[Math.min(state.day-1, 13)].name}. The ${state.patrolName} had to call for rescue.`,
+        starvation: `The ${state.patrolName} ran out of food and energy near ${LOCATIONS[Math.min(state.day-1, 13)].name}. A passing hiker called mountain rescue.`,
+        morale: `Morale collapsed completely. The ${state.patrolName} voted to abandon the trek on Day ${state.day}. Sometimes discretion is the better part of valor.`
+    };
+
+    document.getElementById('gameover-summary').textContent = reasons[reason] || reasons.health;
+    document.getElementById('gameover-stats').innerHTML = `
+        <div style="color:var(--amber)">Days Survived: ${state.day} / 14</div>
+        <div>Final Health: ${Math.round(state.health)}</div>
+        <div>Final Food: ${Math.round(state.food)}</div>
+        <div>Final Morale: ${Math.round(state.morale)}</div>
+        <div>Remaining Kronor: ${state.kronor} SEK</div>
+    `;
+}
+
+// ============================================================
+//  VICTORY
+// ============================================================
+
+function victory() {
+    AudioEngine.epic();
+    showScreen('victory-screen');
+
+    document.getElementById('victory-art').textContent = VICTORY_ART;
+
+    // Score calculation
+    const score = Math.round(state.health + state.food + state.morale + state.energy + state.kronor / 5);
+
+    let rank;
+    if (score >= 350) rank = "Eagle Scout Legend";
+    else if (score >= 280) rank = "Master Pathfinder";
+    else if (score >= 200) rank = "Seasoned Trekker";
+    else if (score >= 120) rank = "Determined Walker";
+    else rank = "Survival Specialist";
+
+    document.getElementById('victory-summary').innerHTML = `
+        ${state.playerName} and the ${state.patrolName} made it to Storlien!<br><br>
+        14 days from Stockholm to the Norwegian border, through forests, mountains, and lakes.<br><br>
+        A trip you'll remember for the rest of your life.<br><br>
+        <span style="color:var(--sweden-yellow); font-family:'Press Start 2P',monospace; font-size:14px;">
+            Rank: ${rank}<br>Score: ${score}
+        </span>
+    `;
+
+    document.getElementById('victory-stats').innerHTML = `
+        <div style="color:var(--green)">Journey Complete: 14 / 14 Days</div>
+        <div>Final Health: ${Math.round(state.health)}</div>
+        <div>Final Food: ${Math.round(state.food)}</div>
+        <div>Final Morale: ${Math.round(state.morale)}</div>
+        <div>Final Energy: ${Math.round(state.energy)}</div>
+        <div>Remaining Kronor: ${state.kronor} SEK</div>
+        <div style="color:var(--sweden-yellow); margin-top:10px;">Difficulty: ${state.difficulty}</div>
+    `;
+}
+
+// ============================================================
+//  KEYBOARD SUPPORT
+// ============================================================
+
+document.addEventListener('keydown', (e) => {
+    if (e.key >= '1' && e.key <= '3') {
+        const btns = document.querySelectorAll('#choices .choice-btn');
+        const idx = parseInt(e.key) - 1;
+        if (btns[idx]) btns[idx].click();
+    }
+    if (e.key === 'Enter') {
+        const storyOv = document.getElementById('story-overlay');
+        if (storyOv.classList.contains('active')) {
+            closeStory();
+            return;
+        }
+        const overlay = document.getElementById('result-overlay');
+        if (overlay.classList.contains('active')) {
+            closeResult();
+            return;
+        }
+        const titleBtn = document.querySelector('#title-screen.active .press-start');
+        if (titleBtn) titleBtn.click();
+    }
+});
+
+</script>
+</body>
+</html>
