@@ -26,14 +26,36 @@ You are 18 years old, setting off on a 14-day Boy Scout trek from Stockholm to S
 ### Route
 Stockholm → Sigtuna → Uppsala → Sala → Lake Siljan → Mora → Orsa Finnmark → Fulufjället → Idre → Grovelsjon → Rogen Reserve → Funäsdalen → Sylarna → Storlien
 
-### HTML Demo Features
-- 14 days of travel across real Swedish locations
+### Visual Style
+Full-screen pixel art in the classic Oregon Trail tradition. Every scene is an illustrated pixel art landscape — Swedish forests, mountain trails, lakeshores, campfires under the midnight sun. No terminal text screens — the art IS the game.
+
+### Day Phase System
+Each of the 14 days plays out across 3 phases (42 total gameplay segments):
+
+- **Morning** — Wake up, eat, check weather, plan your route. The strategic phase.
+- **Afternoon** — Travel, events, encounters, decisions. The action phase.
+- **Camp** — Set up camp, cook, campfire conversations, journal, rest. The reflective phase. Real trip stories surface here.
+
+### Game Tabs (Always Accessible)
+- **Map** — Illustrated pixel-art map of Sweden, current position, route progress
+- **Journal** — Log book of events, choices, and unlocked real trip memories
+- **Status** — Party member health, morale, roles, and relationships
+- **Inventory** — Equipment and items with condition tracking
+- **Resources** — Food, money (SEK), energy, consumption forecasts
+
+### Core Features
+- 14 days × 3 phases = 42 gameplay segments across real Swedish locations
+- Full-screen pixel art backgrounds (5 location types × 3 lighting states)
 - Resource management — health, food, morale, energy, Swedish kronor
+- Party management — scout companions with individual stats and personalities
 - 20+ random events — moose encounters, northern lights, bear tracks, fika breaks
+- Embedded decision-making — choices appear over the scene art, not on separate screens
 - Supply shop with gear that changes gameplay outcomes
 - 3 difficulty levels
-- Personal story/photo layer from the real trip
-- Retro CRT aesthetic with scanlines and pixel fonts
+- Personal story/photo layer from the real trip (surfaces during Camp phases)
+
+### HTML Demo (Phase 0 — Current)
+The current `sweden_trip.html` is a CRT-terminal-style proof of concept. The full game described above is the target for the Ren'Py build.
 
 ## Adding Your Real Trip Content
 
@@ -53,12 +75,12 @@ The game loads personal stories and photos from `data/story.json` and `photos/`.
 ## Project Structure
 
 ```
-sweden_trip.html        ← HTML demo (playable now)
+sweden_trip.html        ← HTML demo (playable now, Phase 0 proof of concept)
 data/
   story.json            ← your real trip stories and photo references
 photos/                 ← trip photos (upload here)
 docs/
-  project-vision.md     ← full project vision, roadmap, and decisions
+  project-vision.md     ← full project vision, visual design, phase system, roadmap
 ```
 
 ## How We Work
