@@ -1,111 +1,73 @@
-# Sweden Trail - A Scout Adventure
+# Sweden Trail
 
-An Oregon Trail-inspired HTML video game about a 2-week Boy Scout trip across Sweden.
+A collaborative game about a real 2-week Boy Scout trip across Sweden in 2008. 20 people. 14 days. Stockholm to the Norwegian border.
 
-## Play Now
+## What Is This?
 
-Open `sweden_trip.html` in any modern browser. No install or server required.
+This started as one person's memory of a scout trip and is becoming a **full game built by the 20 people who were actually there**. The goal is a Steam release built entirely with AI coding tools (Claude Code, Cursor) — none of us are programmers.
 
-## The Story
+## Current Status
 
-You are 18 years old, setting off on a 14-day Boy Scout trek from Stockholm to Storlien (the Norwegian border). Manage your health, food, morale, and energy as you hike through forests, mountains, and lake country. Make choices, survive random events, and experience the Swedish wilderness.
+### Phase 0: HTML Demo (NOW)
+An Oregon Trail-inspired browser game that serves as our proof of concept and recruitment tool.
 
-## Features
+**Play it:** Open `sweden_trip.html` in any browser. No install needed.
 
-- **14 days** of travel across real Swedish locations
-- **Resource management** - health, food, morale, energy, and Swedish kronor
-- **20+ random events** - moose encounters, northern lights, bear tracks, fika breaks, and more
-- **Supply shop** - buy gear before departure that changes gameplay outcomes
-- **3 difficulty levels** - Scout (easy), Venturer (normal), Rover (hard)
-- **Item-dependent outcomes** - your gear affects what choices are available
-- **Personal story layer** - your real trip photos and stories show between game days
-- **Retro CRT aesthetic** with scanlines and pixel fonts
-- **Chiptune sound effects** via Web Audio API
-- **Keyboard support** - press 1/2/3 for choices, Enter to continue
-- **Single HTML file** - no dependencies, no build step
+### Phase 1: Ren'Py Prototype (NEXT)
+We're moving to [Ren'Py](https://www.renpy.org/) — a Python-based visual novel engine perfect for narrative adventure games. Hundreds of Ren'Py games are on Steam. AI tools work excellently with its text-based codebase.
 
-## Route
+### Phase 2+: Full Production
+See `docs/project-vision.md` for the full roadmap.
 
-Stockholm > Sigtuna > Uppsala > Sala > Lake Siljan > Mora > Orsa Finnmark > Fulufjallet > Idre > Grovelsjon > Rogen Reserve > Funäsdalen > Sylarna > Storlien
+## The Game
 
-## How To Play
+You are 18 years old, setting off on a 14-day Boy Scout trek from Stockholm to Storlien (the Norwegian border). Manage your health, food, morale, and energy as you hike through forests, mountains, and lake country.
 
-1. Enter your scout name and patrol
-2. Buy supplies at the Stockholm scout shop
-3. Each day: read the situation, make a choice from 3 options
-4. After each day, your real trip story/photo shows (if added)
-5. Manage resources to survive all 14 days
-6. Reach Storlien to win
+### Route
+Stockholm → Sigtuna → Uppsala → Sala → Lake Siljan → Mora → Orsa Finnmark → Fulufjället → Idre → Grovelsjon → Rogen Reserve → Funäsdalen → Sylarna → Storlien
 
----
+### HTML Demo Features
+- 14 days of travel across real Swedish locations
+- Resource management — health, food, morale, energy, Swedish kronor
+- 20+ random events — moose encounters, northern lights, bear tracks, fika breaks
+- Supply shop with gear that changes gameplay outcomes
+- 3 difficulty levels
+- Personal story/photo layer from the real trip
+- Retro CRT aesthetic with scanlines and pixel fonts
 
-## Adding Your Content (Phone + Desktop Workflow)
+## Adding Your Real Trip Content
 
 The game loads personal stories and photos from `data/story.json` and `photos/`.
 
-### Project Structure
-
-```
-sweden_trip.html     <-- the game (don't need to touch this)
-data/
-  story.json         <-- edit this! your stories for each day
-photos/
-  day01-stockholm.jpg   <-- upload your trip photos here
-  day02-sigtuna.jpg
-  ...
-```
-
-### From Your Phone (GitHub mobile / web)
-
+### From Your Phone (GitHub web)
 1. Go to `data/story.json`
 2. Tap the edit (pencil) icon
-3. Find the day you want, replace the placeholder text in `"realStory"`:
-```json
-{
-  "day": 1,
-  "location": "Stockholm",
-  "realStory": "We arrived at Stockholm central station at 6am. The whole troop was exhausted from the overnight ferry but buzzing with excitement...",
-  "photo": "",
-  "photoCaption": ""
-}
-```
-4. Commit directly to the branch
+3. Find your day, replace the placeholder text in `"realStory"`
+4. Commit
 
-### From Your Desktop
-
-1. Upload photos to the `photos/` folder (drag and drop on GitHub, or git push)
-2. Edit `data/story.json` to point each day's `"photo"` to the file:
-```json
-{
-  "day": 1,
-  "location": "Stockholm",
-  "realStory": "We arrived at Stockholm central station...",
-  "photo": "photos/day01-stockholm.jpg",
-  "photoCaption": "The whole troop at Stockholm Central, 6am, barely awake"
-}
-```
+### From Desktop
+1. Upload photos to `photos/` (drag and drop on GitHub)
+2. Edit `data/story.json` to add your story and point to the photo
 3. Commit and push
 
-### What Happens in the Game
+## Project Structure
 
-- If a day has a **photo**, it shows as a thumbnail during gameplay (click to expand)
-- After each day's game event, a **"From The Real Trip"** screen shows your story + photo
-- Days with no content yet just skip the interstitial (game works fine empty)
-- You can fill in stories gradually - one day at a time, phone or desktop
-
-### Bonus: Memories
-
-At the bottom of `story.json` there's a `"memories"` array for extra stories that don't fit a specific day:
-```json
-"memories": [
-  {
-    "title": "The Night We Got Lost",
-    "text": "It was day 7 and the compass was wrong...",
-    "photo": "photos/lost-night.jpg"
-  }
-]
+```
+sweden_trip.html        ← HTML demo (playable now)
+data/
+  story.json            ← your real trip stories and photo references
+photos/                 ← trip photos (upload here)
+docs/
+  project-vision.md     ← full project vision, roadmap, and decisions
 ```
 
-## Also In This Repo
+## How We Work
 
-- `index.html` - Chez Julien Simulator (cheese shop business sim)
+- **No manual coding.** All code is AI-generated using Claude Code, Cursor, or similar tools.
+- **No code review.** None of us are programmers. We rely on AI + automated testing.
+- **One person per feature/file at a time** to avoid merge conflicts.
+- **GitHub is our hub** for code, docs, and coordination.
+
+## The Team
+
+20 members of the original 2008 Sweden scout trip, collaborating to turn our shared memory into a game.
