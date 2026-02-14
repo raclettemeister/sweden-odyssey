@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Load Test</title>
+</head>
+<body>
+    <h1>Testing Script Loading</h1>
+    <div id="status"></div>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        function log(msg) {
+            status.innerHTML += msg + '<br>';
+            console.log(msg);
+        }
+        
+        log('Starting script load test...');
+        
+        // Load pixelart.js
+        const script1 = document.createElement('script');
+        script1.src = 'js/pixelart.js';
+        script1.onload = () => {
+            log('✅ pixelart.js loaded');
+            log('PixelArt exists: ' + (typeof PixelArt !== 'undefined'));
+            
+            // Load game.js
+            const script2 = document.createElement('script');
+            script2.src = 'js/game.js';
+            script2.onload = () => {
+                log('✅ game.js loaded');
+                log('Game exists: ' + (typeof Game !== 'undefined'));
+                
+                if (typeof Game !== 'undefined') {
+                    log('Game object keys: ' + Object.keys(Game).join(', '));
+                    log('Game.init exists: ' + (typeof Game.init === 'function'));
+                }
+            };
+            script2.onerror = (e) => {
+                log('❌ game.js failed to load: ' + e.message);
+            };
+            document.body.appendChild(script2);
+        };
+        script1.onerror = (e) => {
+            log('❌ pixelart.js failed to load: ' + e.message);
+        };
+        document.body.appendChild(script1);
+    </script>
+</body>
+</html>

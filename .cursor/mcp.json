@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "browsermcp": {
+      "command": "npx",
+      "args": ["-y", "mcpbrowser@latest"]
+    },
+    "puppeteer": {
+      "command": "node",
+      "args": ["node_modules/puppeteer/lib/cjs/puppeteer/puppeteer.js"]
+    }
+  }
+}

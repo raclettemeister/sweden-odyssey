@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery Test</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #111; 
+            color: #fff; 
+            font-family: monospace;
+            padding: 20px;
+        }
+        canvas { 
+            border: 3px solid #E8A832; 
+            display: block;
+            margin: 20px auto;
+            image-rendering: pixelated;
+        }
+        .info {
+            text-align: center;
+            color: #E8A832;
+            font-size: 18px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #4a3a2a;
+            color: #FFE4B4;
+            border: 2px solid #E8A832;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        button:hover { background: #5a4a3a; }
+        .controls { text-align: center; margin: 20px; }
+    </style>
+</head>
+<body>
+    <div class="info">PIXEL ART GALLERY TEST</div>
+    <canvas id="test" width="960" height="540"></canvas>
+    <div class="controls">
+        <button onclick="testScene('city')">City</button>
+        <button onclick="testScene('town')">Town</button>
+        <button onclick="testScene('wilderness')">Wilderness</button>
+        <button onclick="testScene('lake')">Lake</button>
+        <button onclick="testScene('mountain')">Mountain</button>
+    </div>
+    <div class="info" id="status">Click a button above</div>
+    
+    <script src="js/pixelart.js"></script>
+    <script>
+        const Game = { width: 960, height: 540, state: {} };
+    </script>
+    <script src="js/scenes.js"></script>
+    <script>
+        const canvas = document.getElementById('test');
+        const ctx = canvas.getContext('2d');
+        let currentScene = 'city';
+        
+        const mockState = {
+            locationType: 'city',
+            phase: 'afternoon',
+            sceneTime: 0,
+            travelOffset: 0,
+            particles: [],
+            scouts: 20,
+            currentEvent: null,
+            weather: 'clear'
+        };
+        
+        function testScene(type) {
+            currentScene = type;
+            mockState.locationType = type;
+            document.getElementById('status').textContent = 'Rendering: ' + type.toUpperCase();
+            render();
+        }
+        
+        function render() {
+            mockState.sceneTime += 0.016;
+            mockState.travelOffset += 0.3;
+            
+            try {
+                Scenes.render(ctx, mockState);
+                document.getElementById('status').textContent = 'SUCCESS: ' + currentScene.toUpperCase() + ' scene rendered!';
+            } catch(e) {
+                document.getElementById('status').textContent = 'ERROR: ' + e.message;
+                console.error(e);
+            }
+            
+            requestAnimationFrame(render);
+        }
+        
+        // Auto-start
+        render();
+    </script>
+</body>
+</html>

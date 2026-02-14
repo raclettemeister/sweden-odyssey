@@ -1,0 +1,38 @@
+{
+  "name": "sweden-odyssey",
+  "version": "1.0.0",
+  "description": "**Une histoire vraie. Une odyssée mortelle.**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node test-gallery.js",
+    "test:gallery": "node test-gallery.js",
+    "test:puppeteer": "node test-gallery-puppeteer.js",
+    "test:open": "start test-screenshots",
+    "test:visual": "node test-visual-regression.js",
+    "test:visual:update": "node test-visual-regression.js update",
+    "test:visual:report": "start VISUAL_REGRESSION_REPORT.md",
+    "test:visual:diffs": "start test-diffs",
+    "test:all": "node test-gallery.js && node test-gallery-puppeteer.js && node test-visual-regression.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raclettemeister/sweden-odyssey.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/raclettemeister/sweden-odyssey/issues"
+  },
+  "homepage": "https://github.com/raclettemeister/sweden-odyssey#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "puppeteer": "^24.37.3"
+  }
+}

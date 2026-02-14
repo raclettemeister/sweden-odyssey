@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Test output (temporary)
+test-current/
+test-diffs/
+test-screenshots/
+test-screenshots-puppeteer/
+
+# Logs
+npm-debug.log*
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Baseline images - DO COMMIT THESE
+# test-baselines/  (intentionally NOT ignored - these are reference images)

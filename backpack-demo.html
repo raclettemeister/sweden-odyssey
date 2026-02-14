@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Backpack Demo - Rain Covers</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #1a1a1a; 
+            color: #fff; 
+            font-family: 'Courier New', monospace;
+            padding: 40px;
+        }
+        h1 {
+            color: #E8A832;
+            text-align: center;
+            text-shadow: 3px 3px 0px #3a2a1a;
+        }
+        .demo-section {
+            background: #2a2a2a;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border: 3px solid #4a3a2a;
+        }
+        .demo-section h2 {
+            color: #FFE4B4;
+            margin-bottom: 20px;
+        }
+        .backpack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .backpack-item {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            border: 2px solid #3a3a3a;
+        }
+        .backpack-item canvas {
+            image-rendering: pixelated;
+            margin: 10px auto;
+            display: block;
+        }
+        .label {
+            color: #D4C4A4;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .weather-info {
+            background: #4a3a2a;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #FFE4B4;
+            border-left: 4px solid #E8A832;
+        }
+    </style>
+</head>
+<body>
+    <h1>◆ BACKPACK SYSTEM ◆</h1>
+    <p style="text-align: center; color: #D4C4A4;">Realistic backpack colors based on weather conditions</p>
+
+    <div class="demo-section">
+        <div class="weather-info">
+            ☀️ <strong>CLEAR WEATHER</strong> - Realistic dark backpacks with small colored accents (straps, pockets)
+        </div>
+        <h2>Normal Backpacks (No Rain Covers)</h2>
+        <div class="backpack-grid" id="normal-packs"></div>
+    </div>
+
+    <div class="demo-section">
+        <div class="weather-info">
+            🌧️ <strong>RAIN/STORM</strong> - Bright colored rain covers protecting backpacks
+        </div>
+        <h2>Backpacks with Rain Covers</h2>
+        <div class="backpack-grid" id="rain-packs"></div>
+    </div>
+
+    <script src="js/pixelart.js"></script>
+    <script>
+        // Normal backpack colors (dark, realistic - based on photos)
+        const normalBackpackColors = [
+            { body: '#2a2a2a', accent: '#CC3333', name: 'Black + Red Straps' },
+            { body: '#1a3a4a', accent: '#4a8a4a', name: 'Dark Blue + Green' },
+            { body: '#3a2a1a', accent: '#8a6a3a', name: 'Brown + Tan' },
+            { body: '#2a1a2a', accent: '#6666FF', name: 'Dark Purple + Blue' },
+            { body: '#1a2a1a', accent: '#CC3333', name: 'Dark Green + Red' },
+            { body: '#4a3a2a', accent: '#4a6a8a', name: 'Dark Brown + Blue' }
+        ];
+
+        // Rain cover colors (bright)
+        const rainCoverColors = [
+            { body: '#CC3333', accent: '#CC3333', name: 'Red Rain Cover' },
+            { body: '#66CC66', accent: '#66CC66', name: 'Green Rain Cover' },
+            { body: '#FFCC00', accent: '#FFCC00', name: 'Yellow Rain Cover' },
+            { body: '#6666FF', accent: '#6666FF', name: 'Blue Rain Cover' }
+        ];
+
+        function renderBackpack(container, colors, label) {
+            const item = document.createElement('div');
+            item.className = 'backpack-item';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 48;  // 12 * 4 scale
+            canvas.height = 64; // 16 * 4 scale
+            const ctx = canvas.getContext('2d');
+            
+            // Color map
+            const colorMap = {
+                0: null,
+                4: colors.body,
+                5: colors.accent
+            };
+            
+            // Draw
+            PixelArt.drawSprite(ctx, PixelArt.sprites.backpack, 0, 0, colorMap, 4);
+            
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'label';
+            labelDiv.textContent = label;
+            
+            item.appendChild(canvas);
+            item.appendChild(labelDiv);
+            container.appendChild(item);
+        }
+
+        // Render all backpacks
+        const normalContainer = document.getElementById('normal-packs');
+        normalBackpackColors.forEach(color => {
+            renderBackpack(normalContainer, color, color.name);
+        });
+
+        const rainContainer = document.getElementById('rain-packs');
+        rainCoverColors.forEach(color => {
+            renderBackpack(rainContainer, color, color.name);
+        });
+    </script>
+</body>
+</html>

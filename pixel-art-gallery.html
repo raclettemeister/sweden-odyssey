@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweden Odyssey - Pixel Art Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        #gallery-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .gallery-header {
+            background: #4a3a2a;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 
+                0 0 0 2px #3a2a1a,
+                0 0 0 4px #D4C4A4,
+                0 0 0 6px #3a2a1a,
+                0 4px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .gallery-header h1 {
+            color: #E8A832;
+            text-shadow: 3px 3px 0px #3a2a1a;
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .gallery-header p {
+            color: #D4C4A4;
+            font-size: 14px;
+        }
+
+        /* Controls */
+        .controls {
+            background: #2a2a2a;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            border-bottom: 2px solid #3a2a1a;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            color: #E8A832;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: #4a3a2a;
+            color: #FFE4B4;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 
+                0 0 0 2px #3a2a1a,
+                0 0 0 4px #D4C4A4,
+                0 0 0 6px #3a2a1a,
+                inset 0 2px 0 rgba(255, 228, 180, 0.2),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .control-btn:hover {
+            background: #5a4a3a;
+            box-shadow: 
+                0 0 0 2px #3a2a1a,
+                0 0 0 4px #E8A832,
+                0 0 0 6px #3a2a1a,
+                inset 0 2px 0 rgba(255, 228, 180, 0.3),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+                0 0 12px rgba(232, 168, 50, 0.4);
+        }
+
+        .control-btn.active {
+            background: #E8A832;
+            color: #000;
+            box-shadow: 
+                0 0 0 2px #3a2a1a,
+                0 0 0 4px #FFE4B4,
+                0 0 0 6px #3a2a1a,
+                inset 0 2px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.6);
+        }
+
+        /* Canvas Display */
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: #1a1a1a;
+        }
+
+        #pixel-canvas {
+            max-width: 95%;
+            max-height: 70vh;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            background: #000;
+            box-shadow: 
+                0 0 0 3px #3a2a1a,
+                0 0 0 6px #D4C4A4,
+                0 0 0 9px #3a2a1a,
+                0 8px 24px rgba(0, 0, 0, 0.8);
+        }
+
+        .canvas-info {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: #4a3a2a;
+            color: #FFE4B4;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 
+                0 0 0 2px #3a2a1a,
+                0 0 0 4px #D4C4A4,
+                0 0 0 6px #3a2a1a;
+        }
+
+        .canvas-info strong {
+            color: #E8A832;
+        }
+
+        /* Asset Showcase */
+        .asset-showcase {
+            background: #2a2a2a;
+            padding: 20px;
+            border-top: 2px solid #3a2a1a;
+        }
+
+        .asset-title {
+            color: #E8A832;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .asset-item {
+            background: #1a1a1a;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #3a3a3a;
+            cursor: pointer;
+        }
+
+        .asset-item:hover {
+            border-color: #E8A832;
+            background: #2a2a2a;
+        }
+
+        .asset-item canvas {
+            image-rendering: pixelated;
+            margin-bottom: 10px;
+        }
+
+        .asset-name {
+            color: #D4C4A4;
+            font-size: 12px;
+        }
+
+        /* Animation Controls */
+        .animation-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .animation-controls label {
+            color: #D4C4A4;
+            margin-right: 10px;
+        }
+
+        #animation-speed {
+            background: #4a3a2a;
+            color: #FFE4B4;
+            border: 2px solid #3a2a1a;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="gallery-container">
+        <!-- Header -->
+        <div class="gallery-header">
+            <h1>◆ PIXEL ART GALLERY ◆</h1>
+            <p>Sweden Odyssey — 16-bit Adventure Game Assets</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-label">SCENE TYPE</div>
+                <div class="btn-group">
+                    <button class="control-btn active" data-scene="city">City</button>
+                    <button class="control-btn" data-scene="town">Town</button>
+                    <button class="control-btn" data-scene="wilderness">Wilderness</button>
+                    <button class="control-btn" data-scene="lake">Lake</button>
+                    <button class="control-btn" data-scene="mountain">Mountain</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">PHASE</div>
+                <div class="btn-group">
+                    <button class="control-btn active" data-phase="morning">Morning</button>
+                    <button class="control-btn" data-phase="afternoon">Afternoon</button>
+                    <button class="control-btn" data-phase="camp">Camp</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">WEATHER</div>
+                <div class="btn-group">
+                    <button class="control-btn active" data-weather="clear">Clear</button>
+                    <button class="control-btn" data-weather="rain">Rain</button>
+                    <button class="control-btn" data-weather="storm">Storm</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">VIEW</div>
+                <div class="btn-group">
+                    <button class="control-btn active" data-view="scene">Full Scene</button>
+                    <button class="control-btn" data-view="assets">Asset Gallery</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas Display -->
+        <div class="canvas-container" id="scene-view">
+            <canvas id="pixel-canvas" width="960" height="540"></canvas>
+            <div class="canvas-info">
+                <strong id="current-scene">City</strong> — 
+                <strong id="current-phase">Morning</strong> — 
+                <strong id="current-weather">Clear</strong><br>
+                <span id="backpack-info" style="font-size: 12px; color: #D4C4A4; margin-top: 5px; display: inline-block;">
+                    Backpacks: Dark realistic colors with colored accents
+                </span>
+            </div>
+            <div class="animation-controls">
+                <button class="control-btn" id="pause-btn">⏸ Pause</button>
+                <label for="animation-speed" style="margin-left: 20px;">Animation Speed:</label>
+                <input type="range" id="animation-speed" min="0" max="3" step="0.1" value="1">
+                <span id="speed-display">1.0x</span>
+                <button class="control-btn" id="clear-particles" style="margin-left: 20px;">Clear Particles</button>
+            </div>
+        </div>
+
+        <!-- Asset Showcase -->
+        <div class="asset-showcase" id="asset-view" style="display: none;">
+            <div class="asset-title">INDIVIDUAL ASSETS</div>
+            <div class="asset-grid" id="asset-grid"></div>
+        </div>
+    </div>
+
+    <script src="js/pixelart.js"></script>
+    <script>
+        // Mock Game object for scenes.js dependency
+        const Game = {
+            width: 960,
+            height: 540,
+            state: {}
+        };
+    </script>
+    <script src="js/scenes.js"></script>
+    <script>
+        // Gallery State
+        const gallery = {
+            currentScene: 'city',
+            currentPhase: 'morning',
+            currentView: 'scene',
+            time: 0,
+            lastTimestamp: 0,
+            animationSpeed: 1,
+            animationFrame: null,
+            
+            // Mock game state for rendering
+            mockState: {
+                locationType: 'city',
+                phase: 'morning',
+                sceneTime: 0,
+                travelOffset: 0,
+                particles: [],
+                scouts: 20,
+                currentEvent: null,
+                weather: 'clear'
+            }
+        };
+
+        const canvas = document.getElementById('pixel-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Initialize
+        function init() {
+            setupControls();
+            startAnimation();
+            generateAssetGallery();
+        }
+
+        // Setup button controls
+        function setupControls() {
+            // Scene type buttons
+            document.querySelectorAll('[data-scene]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-scene]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gallery.currentScene = btn.dataset.scene;
+                    gallery.mockState.locationType = btn.dataset.scene;
+                    
+                    // Reset particles when changing scenes
+                    gallery.mockState.particles = [];
+                    
+                    updateInfo();
+                });
+            });
+
+            // Phase buttons
+            document.querySelectorAll('[data-phase]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-phase]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gallery.currentPhase = btn.dataset.phase;
+                    gallery.mockState.phase = btn.dataset.phase;
+                    
+                    // Reset particles when changing phases
+                    gallery.mockState.particles = [];
+                    
+                    updateInfo();
+                });
+            });
+
+            // Weather buttons
+            document.querySelectorAll('[data-weather]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-weather]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gallery.mockState.weather = btn.dataset.weather;
+                    updateInfo();
+                });
+            });
+
+            // View buttons
+            document.querySelectorAll('[data-view]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gallery.currentView = btn.dataset.view;
+                    toggleView();
+                });
+            });
+
+            // Animation speed slider
+            const speedSlider = document.getElementById('animation-speed');
+            speedSlider.addEventListener('input', (e) => {
+                gallery.animationSpeed = parseFloat(e.target.value);
+                const speed = gallery.animationSpeed;
+                document.getElementById('speed-display').textContent = 
+                    speed === 0 ? 'Paused' : speed.toFixed(1) + 'x';
+            });
+
+            // Pause button
+            document.getElementById('pause-btn').addEventListener('click', (e) => {
+                if (gallery.animationSpeed === 0) {
+                    gallery.animationSpeed = 1;
+                    speedSlider.value = 1;
+                    e.target.textContent = '⏸ Pause';
+                    document.getElementById('speed-display').textContent = '1.0x';
+                } else {
+                    gallery.animationSpeed = 0;
+                    speedSlider.value = 0;
+                    e.target.textContent = '▶ Play';
+                    document.getElementById('speed-display').textContent = 'Paused';
+                }
+            });
+
+            // Clear particles button
+            document.getElementById('clear-particles').addEventListener('click', () => {
+                gallery.mockState.particles = [];
+            });
+        }
+
+        // Update info display
+        function updateInfo() {
+            document.getElementById('current-scene').textContent = 
+                gallery.currentScene.charAt(0).toUpperCase() + gallery.currentScene.slice(1);
+            document.getElementById('current-phase').textContent = 
+                gallery.currentPhase.charAt(0).toUpperCase() + gallery.currentPhase.slice(1);
+            
+            const weather = gallery.mockState.weather || 'clear';
+            document.getElementById('current-weather').textContent = 
+                weather.charAt(0).toUpperCase() + weather.slice(1);
+            
+            // Update backpack info
+            const backpackInfo = document.getElementById('backpack-info');
+            if (weather === 'rain' || weather === 'storm') {
+                backpackInfo.textContent = '🌧️ Backpacks: Bright colored rain covers (red, green, yellow, blue)';
+                backpackInfo.style.color = '#E8A832';
+            } else {
+                backpackInfo.textContent = '☀️ Backpacks: Dark realistic (black, brown, dark blue) + colored straps';
+                backpackInfo.style.color = '#D4C4A4';
+            }
+        }
+
+        // Toggle between scene view and asset view
+        function toggleView() {
+            if (gallery.currentView === 'scene') {
+                document.getElementById('scene-view').style.display = 'flex';
+                document.getElementById('asset-view').style.display = 'none';
+            } else {
+                document.getElementById('scene-view').style.display = 'none';
+                document.getElementById('asset-view').style.display = 'block';
+            }
+        }
+
+        // Animation loop
+        function startAnimation() {
+            function animate(timestamp) {
+                // Calculate proper delta time
+                if (gallery.lastTimestamp === 0) {
+                    gallery.lastTimestamp = timestamp;
+                }
+                const deltaTime = (timestamp - gallery.lastTimestamp) / 1000;
+                gallery.lastTimestamp = timestamp;
+                
+                // Update time with speed multiplier
+                gallery.time += deltaTime * gallery.animationSpeed;
+                
+                // Update mock state
+                gallery.mockState.sceneTime = gallery.time;
+                gallery.mockState.travelOffset = gallery.time * 15; // Slow scroll
+                
+                // Clean up old particles to prevent accumulation
+                gallery.mockState.particles = gallery.mockState.particles.filter(p => p.life > 0);
+                
+                // Limit particle count to prevent performance issues
+                if (gallery.mockState.particles.length > 100) {
+                    gallery.mockState.particles = gallery.mockState.particles.slice(-100);
+                }
+                
+                // Render scene
+                renderScene();
+                
+                gallery.animationFrame = requestAnimationFrame(animate);
+            }
+            
+            gallery.animationFrame = requestAnimationFrame(animate);
+        }
+
+        // Render the current scene
+        function renderScene() {
+            try {
+                // Clear
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Render using the Scenes module
+                if (typeof Scenes !== 'undefined' && Scenes.render) {
+                    Scenes.render(ctx, gallery.mockState);
+                } else {
+                    // Fallback - show error
+                    ctx.fillStyle = '#E8A832';
+                    ctx.font = '20px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Loading scene renderer...', canvas.width/2, canvas.height/2);
+                }
+            } catch(e) {
+                console.error('Render error:', e);
+                ctx.fillStyle = '#ff3333';
+                ctx.font = '16px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('Error: ' + e.message, canvas.width/2, canvas.height/2);
+            }
+        }
+
+        // Generate asset gallery
+        function generateAssetGallery() {
+            const assetGrid = document.getElementById('asset-grid');
+            
+            const assets = [
+                { name: 'Scout Walk 1', sprite: PixelArt.sprites.scoutWalk1, colorMap: getScoutColors(), scale: 3 },
+                { name: 'Scout Front', sprite: PixelArt.sprites.scoutFront, colorMap: getScoutColors(), scale: 3 },
+                { name: 'Scout Walk 2', sprite: PixelArt.sprites.scoutWalk2, colorMap: getScoutColors(), scale: 3 },
+                { name: 'Backpack (Red)', sprite: PixelArt.sprites.backpack, colorMap: getBackpackColors('#CC3333'), scale: 2 },
+                { name: 'Backpack (Green)', sprite: PixelArt.sprites.backpack, colorMap: getBackpackColors('#66CC66'), scale: 2 },
+                { name: 'Backpack (Yellow)', sprite: PixelArt.sprites.backpack, colorMap: getBackpackColors('#FFCC00'), scale: 2 },
+                { name: 'Pine Tree', sprite: PixelArt.sprites.pineTree, colorMap: getTreeColors(), scale: 1 }
+            ];
+
+            assets.forEach(asset => {
+                const item = document.createElement('div');
+                item.className = 'asset-item';
+                
+                const assetCanvas = document.createElement('canvas');
+                const spriteHeight = asset.sprite.length;
+                const spriteWidth = asset.sprite[0].length;
+                assetCanvas.width = spriteWidth * asset.scale;
+                assetCanvas.height = spriteHeight * asset.scale;
+                
+                const assetCtx = assetCanvas.getContext('2d');
+                PixelArt.drawSprite(assetCtx, asset.sprite, 0, 0, asset.colorMap, asset.scale);
+                
+                const name = document.createElement('div');
+                name.className = 'asset-name';
+                name.textContent = asset.name;
+                
+                item.appendChild(assetCanvas);
+                item.appendChild(name);
+                assetGrid.appendChild(item);
+            });
+        }
+
+        // Helper functions for color maps
+        function getScoutColors() {
+            return {
+                0: null,
+                1: PixelArt.palette.scoutRed,
+                2: PixelArt.palette.scoutOrange,
+                3: PixelArt.palette.skin[2],
+                8: '#000000'
+            };
+        }
+
+        function getBackpackColors(color) {
+            return {
+                0: null,
+                4: color,
+                5: color
+            };
+        }
+
+        function getTreeColors() {
+            return {
+                0: null,
+                1: PixelArt.palette.pineGreen[0],
+                2: PixelArt.palette.pineGreen[1],
+                3: PixelArt.palette.pineGreen[2],
+                4: PixelArt.palette.wood[0],
+                5: PixelArt.palette.wood[2]
+            };
+        }
+
+        // Start gallery
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Gallery loaded');
+            console.log('PixelArt defined:', typeof PixelArt !== 'undefined');
+            console.log('Scenes defined:', typeof Scenes !== 'undefined');
+            console.log('Game defined:', typeof Game !== 'undefined');
+            init();
+        });
+    </script>
+</body>
+</html>

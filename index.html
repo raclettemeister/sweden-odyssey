@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweden Odyssey — Une Histoire Vraie</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- HUD Overlay -->
+        <div id="hud">
+            <div class="hud-top">
+                <div class="hud-tabs">
+                    <button class="tab-btn" data-tab="map">CARTE</button>
+                    <button class="tab-btn" data-tab="journal">JOURNAL</button>
+                    <button class="tab-btn" data-tab="status">ÉQUIPE</button>
+                    <button class="tab-btn" data-tab="inventory">INVENTAIRE</button>
+                </div>
+                <div class="day-display">
+                    <span id="day-info">Jour 1 / 14 — Matin</span>
+                    <span id="location-info">Stockholm</span>
+                </div>
+            </div>
+            
+            <div class="hud-stats">
+                <div class="stat-section">
+                    <div class="stat-header">CONDITIONS</div>
+                    <div class="stat-item">
+                        <span class="stat-label">Météo:</span>
+                        <span class="stat-value" id="stat-weather">Clair</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Santé:</span>
+                        <span class="stat-value health-status" id="stat-health">Bonne</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Allure:</span>
+                        <span class="stat-value" id="stat-pace">Normale</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Rations:</span>
+                        <span class="stat-value" id="stat-rations">Normales</span>
+                    </div>
+                </div>
+                
+                <div class="stat-divider"></div>
+                
+                <div class="stat-section">
+                    <div class="stat-header">PROVISIONS</div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nourriture:</span>
+                        <span class="stat-value" id="stat-food">500 kg</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Argent:</span>
+                        <span class="stat-value" id="stat-money">450 SEK</span>
+                    </div>
+                </div>
+                
+                <div class="stat-divider"></div>
+                
+                <div class="stat-section">
+                    <div class="stat-header">GROUPE</div>
+                    <div class="stat-item">
+                        <span class="stat-label">Scouts:</span>
+                        <span class="stat-value scouts-count" id="stat-scouts">20</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Prochain:</span>
+                        <span class="stat-value" id="stat-distance">45 km</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text/Choice Box -->
+        <div id="text-box" class="hidden">
+            <div id="text-content"></div>
+            <div id="choice-buttons"></div>
+            <div id="continue-prompt" class="hidden">
+                <button id="continue-btn">Continuer</button>
+            </div>
+        </div>
+
+        <!-- Tab Overlays -->
+        <div id="tab-overlay" class="hidden">
+            <div class="tab-content">
+                <button class="close-tab">✕</button>
+                <div id="tab-inner"></div>
+            </div>
+        </div>
+
+        <!-- Minigame Container -->
+        <div id="minigame-container" class="hidden"></div>
+
+        <!-- CRT Filter Toggle -->
+        <button id="crt-toggle" class="crt-toggle">CRT</button>
+    </div>
+
+    <script src="js/pixelart.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/scenes.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        // Initialize game when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            Game.init();
+        });
+    </script>
+</body>
+</html>

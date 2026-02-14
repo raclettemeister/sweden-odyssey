@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Auto-Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #4a3a2a;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 3px solid #E8A832;
+        }
+
+        .header h1 {
+            color: #E8A832;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .controls-panel {
+            background: #2a2a2a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #3a3a3a;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .control-row label {
+            color: #E8A832;
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #4a3a2a;
+            color: #FFE4B4;
+            border: 2px solid #E8A832;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #5a4a3a;
+            box-shadow: 0 0 10px rgba(232, 168, 50, 0.5);
+        }
+
+        .btn.active {
+            background: #E8A832;
+            color: #000;
+        }
+
+        .test-sequence {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #3a3a3a;
+        }
+
+        .test-sequence h2 {
+            color: #E8A832;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .test-list {
+            list-style: none;
+        }
+
+        .test-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            background: #2a2a2a;
+            border-left: 4px solid #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .test-item:hover {
+            background: #3a3a3a;
+            border-left-color: #E8A832;
+        }
+
+        .test-item.current {
+            border-left-color: #E8A832;
+            background: #3a3a3a;
+            color: #E8A832;
+        }
+
+        .test-item.completed {
+            border-left-color: #66CC66;
+            opacity: 0.7;
+        }
+
+        .iframe-container {
+            background: #000;
+            padding: 20px;
+            border: 3px solid #E8A832;
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+
+        .info-panel {
+            background: #2a2a2a;
+            padding: 20px;
+            border: 2px solid #3a3a3a;
+        }
+
+        .info-panel h3 {
+            color: #E8A832;
+            margin-bottom: 10px;
+        }
+
+        .info-panel textarea {
+            width: 100%;
+            height: 150px;
+            background: #1a1a1a;
+            color: #f5f5f5;
+            border: 2px solid #3a3a3a;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .status.pending {
+            background: #666;
+            color: #fff;
+        }
+
+        .status.current {
+            background: #E8A832;
+            color: #000;
+        }
+
+        .status.completed {
+            background: #66CC66;
+            color: #000;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #1a1a1a;
+            border: 2px solid #3a3a3a;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #E8A832, #FFE4B4);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .instructions {
+            background: #4a3a2a;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #E8A832;
+        }
+
+        .instructions h3 {
+            color: #E8A832;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #FFE4B4;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
+        .checklist {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid #3a3a3a;
+        }
+
+        .checklist h4 {
+            color: #E8A832;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .checklist label {
+            display: block;
+            margin-bottom: 5px;
+            color: #D4C4A4;
+            cursor: pointer;
+        }
+
+        .checklist input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .auto-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            background: #1a1a1a;
+            padding: 10px 20px;
+            border: 2px solid #E8A832;
+            color: #E8A832;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 PIXEL ART GALLERY - AUTOMATED TESTER 🎨</h1>
+            <p>Systematic testing tool for Sweden Odyssey gallery</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Testing Instructions</h3>
+            <ol>
+                <li><strong>Click "Start Auto Test"</strong> to automatically cycle through all scene combinations</li>
+                <li>Each scene will display for 5 seconds (adjust timer if needed)</li>
+                <li><strong>Take screenshots</strong> using <code>Win + Shift + S</code> for each scene</li>
+                <li>Check the verification checklist for each scene</li>
+                <li>Add notes in the text area below the gallery</li>
+                <li>Click "Next Test" manually or let auto-advance continue</li>
+            </ol>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%">0 / 18 Tests</div>
+        </div>
+
+        <div class="auto-controls">
+            <button class="btn" id="start-auto">▶ Start Auto Test</button>
+            <button class="btn" id="pause-auto">⏸ Pause</button>
+            <button class="btn" id="next-test">⏭ Next Test</button>
+            <button class="btn" id="prev-test">⏮ Previous Test</button>
+            <div class="timer" id="timer">Time: 5s</div>
+            <label style="color: #E8A832; margin-left: 20px;">
+                Delay: <input type="number" id="delay-input" value="5" min="1" max="30" style="width: 60px; background: #1a1a1a; color: #fff; border: 2px solid #3a3a3a; padding: 5px;">s
+            </label>
+        </div>
+
+        <div class="controls-panel">
+            <div class="control-row">
+                <label>Current Test:</label>
+                <span id="current-test-name" style="color: #E8A832; font-size: 18px; font-weight: bold;">City + Morning</span>
+                <span class="status current" id="test-status">CURRENT</span>
+            </div>
+        </div>
+
+        <div class="iframe-container">
+            <iframe id="gallery-frame" src="pixel-art-gallery.html"></iframe>
+        </div>
+
+        <div class="info-panel">
+            <h3>📝 Current Test Notes</h3>
+            <div class="checklist">
+                <h4>Verification Checklist:</h4>
+                <label><input type="checkbox" class="check-item"> ✅ Rendering is crisp and pixelated (not blurry)</label>
+                <label><input type="checkbox" class="check-item"> ✅ No flickering of static elements (moss, rocks, snow)</label>
+                <label><input type="checkbox" class="check-item"> ✅ Animations are smooth (water, fire, scouts)</label>
+                <label><input type="checkbox" class="check-item"> ✅ All sprites render correctly (no missing elements)</label>
+                <label><input type="checkbox" class="check-item"> ✅ Colors are correct and consistent</label>
+                <label><input type="checkbox" class="check-item"> ✅ Z-order/layering is correct (no clipping issues)</label>
+                <label><input type="checkbox" class="check-item"> ✅ Composition looks good overall</label>
+                <label><input type="checkbox" class="check-item"> ✅ No console errors</label>
+            </div>
+            <h4 style="color: #E8A832; margin-top: 15px; margin-bottom: 10px;">Additional Observations:</h4>
+            <textarea id="notes" placeholder="Enter any issues, observations, or notes about this scene..."></textarea>
+            <button class="btn" id="save-notes" style="margin-top: 10px;">💾 Save Notes</button>
+        </div>
+
+        <div class="test-sequence">
+            <h2>📋 Test Sequence (15 Scene Combinations + 3 Special Tests)</h2>
+            <ul class="test-list" id="test-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Test sequence definition
+        const tests = [
+            // Scene combinations (15 total)
+            { scene: 'city', phase: 'morning', weather: 'clear', name: 'City + Morning', type: 'scene' },
+            { scene: 'city', phase: 'afternoon', weather: 'clear', name: 'City + Afternoon', type: 'scene' },
+            { scene: 'city', phase: 'camp', weather: 'clear', name: 'City + Camp', type: 'scene' },
+            { scene: 'town', phase: 'morning', weather: 'clear', name: 'Town + Morning', type: 'scene' },
+            { scene: 'town', phase: 'afternoon', weather: 'clear', name: 'Town + Afternoon', type: 'scene' },
+            { scene: 'town', phase: 'camp', weather: 'clear', name: 'Town + Camp', type: 'scene' },
+            { scene: 'wilderness', phase: 'morning', weather: 'clear', name: 'Wilderness + Morning', type: 'scene' },
+            { scene: 'wilderness', phase: 'afternoon', weather: 'clear', name: 'Wilderness + Afternoon', type: 'scene' },
+            { scene: 'wilderness', phase: 'camp', weather: 'clear', name: 'Wilderness + Camp (Fireflies)', type: 'scene' },
+            { scene: 'lake', phase: 'morning', weather: 'clear', name: 'Lake + Morning', type: 'scene' },
+            { scene: 'lake', phase: 'afternoon', weather: 'clear', name: 'Lake + Afternoon', type: 'scene' },
+            { scene: 'lake', phase: 'camp', weather: 'clear', name: 'Lake + Camp', type: 'scene' },
+            { scene: 'mountain', phase: 'morning', weather: 'clear', name: 'Mountain + Morning (Snow)', type: 'scene' },
+            { scene: 'mountain', phase: 'afternoon', weather: 'clear', name: 'Mountain + Afternoon', type: 'scene' },
+            { scene: 'mountain', phase: 'camp', weather: 'clear', name: 'Mountain + Camp', type: 'scene' },
+            
+            // Weather tests (3 total)
+            { scene: 'wilderness', phase: 'afternoon', weather: 'rain', name: 'Wilderness + Rain (Backpack Colors)', type: 'weather' },
+            { scene: 'mountain', phase: 'afternoon', weather: 'storm', name: 'Mountain + Storm', type: 'weather' },
+            
+            // Special view test
+            { view: 'assets', name: 'Asset Gallery View', type: 'special' }
+        ];
+
+        // State
+        let currentTestIndex = 0;
+        let autoRunning = false;
+        let autoTimer = null;
+        let countdown = 5;
+        let testNotes = {};
+
+        // Elements
+        const iframe = document.getElementById('gallery-frame');
+        const testList = document.getElementById('test-list');
+        const currentTestName = document.getElementById('current-test-name');
+        const testStatus = document.getElementById('test-status');
+        const progress = document.getElementById('progress');
+        const timerDisplay = document.getElementById('timer');
+        const notesTextarea = document.getElementById('notes');
+        const delayInput = document.getElementById('delay-input');
+
+        // Initialize test list
+        function initTestList() {
+            tests.forEach((test, index) => {
+                const li = document.createElement('li');
+                li.className = 'test-item';
+                if (index === 0) li.classList.add('current');
+                
+                let icon = '🎬';
+                if (test.type === 'weather') icon = '🌧️';
+                if (test.type === 'special') icon = '🎨';
+                
+                li.innerHTML = `${icon} ${index + 1}. ${test.name}`;
+                li.dataset.index = index;
+                li.addEventListener('click', () => goToTest(index));
+                testList.appendChild(li);
+            });
+        }
+
+        // Update progress
+        function updateProgress() {
+            const percent = ((currentTestIndex + 1) / tests.length) * 100;
+            progress.style.width = percent + '%';
+            progress.textContent = `${currentTestIndex + 1} / ${tests.length} Tests`;
+        }
+
+        // Apply test to iframe
+        function applyTest(test) {
+            try {
+                const iframeWindow = iframe.contentWindow;
+                const iframeDoc = iframe.contentDocument;
+                
+                if (test.type === 'special' && test.view === 'assets') {
+                    // Switch to asset gallery view
+                    const viewBtn = iframeDoc.querySelector('[data-view="assets"]');
+                    if (viewBtn) viewBtn.click();
+                } else {
+                    // Switch to scene view first
+                    const sceneViewBtn = iframeDoc.querySelector('[data-view="scene"]');
+                    if (sceneViewBtn) sceneViewBtn.click();
+                    
+                    // Apply scene
+                    if (test.scene) {
+                        const sceneBtn = iframeDoc.querySelector(`[data-scene="${test.scene}"]`);
+                        if (sceneBtn) sceneBtn.click();
+                    }
+                    
+                    // Apply phase
+                    if (test.phase) {
+                        const phaseBtn = iframeDoc.querySelector(`[data-phase="${test.phase}"]`);
+                        if (phaseBtn) phaseBtn.click();
+                    }
+                    
+                    // Apply weather
+                    if (test.weather) {
+                        const weatherBtn = iframeDoc.querySelector(`[data-weather="${test.weather}"]`);
+                        if (weatherBtn) weatherBtn.click();
+                    }
+                }
+            } catch (e) {
+                console.error('Error applying test:', e);
+            }
+        }
+
+        // Go to specific test
+        function goToTest(index) {
+            if (index < 0 || index >= tests.length) return;
+            
+            // Save current notes
+            saveCurrentNotes();
+            
+            // Update index
+            currentTestIndex = index;
+            const test = tests[index];
+            
+            // Update UI
+            currentTestName.textContent = test.name;
+            updateProgress();
+            
+            // Update test list
+            document.querySelectorAll('.test-item').forEach((item, i) => {
+                item.classList.remove('current');
+                if (i === index) item.classList.add('current');
+                if (i < index) item.classList.add('completed');
+            });
+            
+            // Apply test
+            applyTest(test);
+            
+            // Load notes
+            loadNotes();
+            
+            // Reset checkboxes
+            document.querySelectorAll('.check-item').forEach(cb => cb.checked = false);
+        }
+
+        // Save notes
+        function saveCurrentNotes() {
+            testNotes[currentTestIndex] = {
+                notes: notesTextarea.value,
+                checks: Array.from(document.querySelectorAll('.check-item')).map(cb => cb.checked)
+            };
+        }
+
+        // Load notes
+        function loadNotes() {
+            const saved = testNotes[currentTestIndex];
+            if (saved) {
+                notesTextarea.value = saved.notes || '';
+                document.querySelectorAll('.check-item').forEach((cb, i) => {
+                    cb.checked = saved.checks[i] || false;
+                });
+            } else {
+                notesTextarea.value = '';
+            }
+        }
+
+        // Auto test functions
+        function startAutoTest() {
+            autoRunning = true;
+            document.getElementById('start-auto').textContent = '⏸ Pause Auto';
+            runAutoTest();
+        }
+
+        function pauseAutoTest() {
+            autoRunning = false;
+            document.getElementById('start-auto').textContent = '▶ Resume Auto';
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        }
+
+        function runAutoTest() {
+            if (!autoRunning) return;
+            
+            countdown = parseInt(delayInput.value);
+            timerDisplay.textContent = `Time: ${countdown}s`;
+            
+            autoTimer = setInterval(() => {
+                countdown--;
+                timerDisplay.textContent = `Time: ${countdown}s`;
+                
+                if (countdown <= 0) {
+                    clearInterval(autoTimer);
+                    
+                    // Move to next test
+                    if (currentTestIndex < tests.length - 1) {
+                        goToTest(currentTestIndex + 1);
+                        runAutoTest();
+                    } else {
+                        pauseAutoTest();
+                        alert('✅ All tests completed! Review your screenshots and notes.');
+                    }
+                }
+            }, 1000);
+        }
+
+        // Event listeners
+        document.getElementById('start-auto').addEventListener('click', () => {
+            if (autoRunning) {
+                pauseAutoTest();
+            } else {
+                startAutoTest();
+            }
+        });
+
+        document.getElementById('pause-auto').addEventListener('click', pauseAutoTest);
+
+        document.getElementById('next-test').addEventListener('click', () => {
+            if (autoTimer) clearInterval(autoTimer);
+            if (currentTestIndex < tests.length - 1) {
+                goToTest(currentTestIndex + 1);
+            }
+        });
+
+        document.getElementById('prev-test').addEventListener('click', () => {
+            if (autoTimer) clearInterval(autoTimer);
+            if (currentTestIndex > 0) {
+                goToTest(currentTestIndex - 1);
+            }
+        });
+
+        document.getElementById('save-notes').addEventListener('click', () => {
+            saveCurrentNotes();
+            alert('✅ Notes saved for: ' + tests[currentTestIndex].name);
+        });
+
+        // Export all notes
+        function exportAllNotes() {
+            let report = '# PIXEL ART GALLERY TEST REPORT\n\n';
+            report += `Date: ${new Date().toLocaleString()}\n\n`;
+            report += '---\n\n';
+            
+            tests.forEach((test, index) => {
+                const notes = testNotes[index];
+                report += `## Test ${index + 1}: ${test.name}\n\n`;
+                
+                if (notes) {
+                    report += '**Checklist:**\n';
+                    const checkLabels = [
+                        'Rendering is crisp and pixelated',
+                        'No flickering of static elements',
+                        'Animations are smooth',
+                        'All sprites render correctly',
+                        'Colors are correct',
+                        'Z-order/layering is correct',
+                        'Composition looks good',
+                        'No console errors'
+                    ];
+                    notes.checks.forEach((checked, i) => {
+                        report += `- [${checked ? 'x' : ' '}] ${checkLabels[i]}\n`;
+                    });
+                    
+                    if (notes.notes) {
+                        report += `\n**Notes:**\n${notes.notes}\n`;
+                    }
+                } else {
+                    report += '*No notes recorded*\n';
+                }
+                
+                report += '\n---\n\n';
+            });
+            
+            return report;
+        }
+
+        // Add export button
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'btn';
+        exportBtn.textContent = '📥 Export Report';
+        exportBtn.style.marginLeft = '10px';
+        exportBtn.addEventListener('click', () => {
+            const report = exportAllNotes();
+            const blob = new Blob([report], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'gallery-test-report.md';
+            a.click();
+        });
+        document.querySelector('.auto-controls').appendChild(exportBtn);
+
+        // Initialize
+        iframe.addEventListener('load', () => {
+            console.log('Gallery loaded in iframe');
+            // Wait a bit for gallery to initialize
+            setTimeout(() => {
+                applyTest(tests[0]);
+            }, 1000);
+        });
+
+        initTestList();
+        updateProgress();
+    </script>
+</body>
+</html>
